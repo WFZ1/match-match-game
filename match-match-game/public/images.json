@@ -1,0 +1,41 @@
+[
+  {
+    "category": "animals",
+    "images": [
+      "bison.jpg",
+      "eagle.jpg",
+      "elephant.jpg",
+      "kangaroo.jpg",
+      "lion.jpg",
+      "penguin.jpg",
+      "tiger.jpg",
+      "wolf.jpg"
+    ]
+  },
+  {
+    "category": "fruits",
+    "images": [
+      "avocado.jpg",
+      "banana.jpg",
+      "cherry.jpg",
+      "lemon.jpg",
+      "orange.jpg",
+      "pear.jpg",
+      "plums.jpg",
+      "watermelon.jpg"
+    ]
+  },
+  {
+    "category": "vegetables",
+    "images": [
+      "cabbage.jpg",
+      "carrots.jpg",
+      "cucumbers.jpg",
+      "onions.jpg",
+      "peppers.jpg",
+      "potatoes.jpg",
+      "pumpkins.jpg",
+      "tomatoes.jpg"
+    ]
+  }
+]

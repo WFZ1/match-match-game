@@ -1,0 +1,5 @@
+.cards-field {
+  display: grid;
+  grid-template: repeat(4, 168px) / repeat(4, 168px);
+  gap: 24px 14px;
+}

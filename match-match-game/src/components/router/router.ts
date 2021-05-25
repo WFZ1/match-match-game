@@ -7,7 +7,7 @@ interface IRout {
   callback: () => void;
 }
 
-class Router {
+export default class Router {
   private routes: IRout[] = []; // list of registered routes
 
   private readonly root: string = '/'; // for history mode
@@ -106,5 +106,3 @@ class Router {
     });
   }
 }
-
-export default Router;

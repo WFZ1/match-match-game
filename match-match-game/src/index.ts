@@ -1,3 +1,4 @@
+import App from './app';
 import Router from './components/router/router';
 
 const main = document.createElement('main');
@@ -78,3 +79,5 @@ navLinkList.forEach((obj) => {
 
 document.body.append(header);
 document.body.append(main);
+
+new App(document.body).start();
