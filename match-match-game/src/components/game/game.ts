@@ -1,7 +1,7 @@
 import BaseComponent from '../base-component';
 import CardsField from '../cards-field/cards-field';
 import Card from '../card/card';
-import { delay } from '../../shared/delay';
+import delay from '../../shared/delay';
 
 const FLIP_DELAY = 1000;
 
