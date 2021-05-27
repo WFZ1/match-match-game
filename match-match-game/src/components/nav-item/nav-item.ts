@@ -13,7 +13,7 @@ export default class NavItem extends BaseComponent {
     this.link.href = item.url;
 
     // 'icon-star.svg' initially has circled form, other no
-    let spanClasses = ['nav-item__img-wrap'];
+    const spanClasses = ['nav-item__img-wrap'];
     if (!/icon-star.svg$/.test(item.image)) spanClasses.push('nav-item__img-wrap_styled');
 
     const span = BaseComponent.createElement('span', spanClasses) as HTMLSpanElement;

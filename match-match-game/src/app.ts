@@ -3,6 +3,7 @@ import Router from './components/router/router';
 import Header from './components/header/header';
 import Game from './components/game/game';
 import ImageCategoryModel from './models/image-category-model';
+import PageAbout from './components/page-about/page-about';
 
 export default class App extends BaseComponent {
   private readonly router;
@@ -10,6 +11,8 @@ export default class App extends BaseComponent {
   private readonly header;
 
   private readonly main;
+
+  private readonly pageAbout;
 
   private readonly game: Game;
 
@@ -30,15 +33,16 @@ export default class App extends BaseComponent {
     this.addRoutes();
 
     this.game = new Game();
-    this.main.append(this.game.el);
+    //this.main.append(this.game.el);
+
+    this.pageAbout = new PageAbout(this.main);
   }
 
   addRoutes() {
     this.router
       .add('', () => {
-        const el = BaseComponent.createElement('h2');
-        el.innerText = 'Welcome in about page!';
-        this.main.prepend(el);
+        this.main.innerHTML = '';
+        this.pageAbout.render();
       })
       .add('score', () => {
         this.main.innerText = 'Welcome in best score page!';
