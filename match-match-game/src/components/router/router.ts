@@ -8,7 +8,7 @@ interface IRout {
 }
 
 export default class Router {
-  private rout?: Router;  // singleton pattern
+  private rout?: Router; // singleton pattern
 
   private routes: IRout[] = []; // list of registered routes
 
@@ -19,7 +19,6 @@ export default class Router {
   private curPage: string | undefined = undefined;
 
   constructor({ mode, root }: IRouterOpts) {
-
     // Singleton pattern
     if (this.rout) return this.rout;
     this.rout = this;

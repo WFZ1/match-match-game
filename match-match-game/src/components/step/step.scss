@@ -40,15 +40,16 @@
   border-radius: 50%;
   color: #fff;
   background-color: #2196f3;
-  box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 3px 4px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.14);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 3px 4px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.14);
 }
 
 .step__text {
   margin: 0;
   font-size: 14px;
   line-height: 20px;
-  letter-spacing: .25px;
-  color: rgba(0,0,0,.6);
+  letter-spacing: 0.25px;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .step__img {

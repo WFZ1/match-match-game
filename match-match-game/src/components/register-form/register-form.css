@@ -1,0 +1,47 @@
+.register-form {
+  display: -ms-grid;
+  display: grid;
+  gap: 16px;
+  padding: 33px 19px 26px 21px;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  background-color: #fafafa;
+}
+
+.register-form__field {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+}
+
+.register-form__img {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 2;
+  grid-column: 2 / 4;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 3;
+  grid-row: 1 / 4;
+  margin-left: 22px;
+}
+
+.register-form__btn {
+  margin-top: 90px;
+}
+
+.register-form__add-user {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2 / 3;
+  margin-left: 37px;
+}
+
+.register-form__cancel {
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 1;
+  grid-column: 3 / 4;
+}
+/*# sourceMappingURL=register-form.css.map */

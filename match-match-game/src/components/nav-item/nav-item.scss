@@ -1,5 +1,9 @@
 .nav-item {
+  transition: background-color 0.25s linear;
+}
 
+.nav-item_active {
+  background-color: #1e88e5;
 }
 
 .nav-item__link {
@@ -9,7 +13,7 @@
   padding: 10px 12px;
   font-size: 12px;
   line-height: 15px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
   color: #fff;
   text-decoration: none;
 }
@@ -26,7 +30,4 @@
     background-color: #fff;
     border-radius: 50%;
   }
-}
-
-.nav-item__img {
 }

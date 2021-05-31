@@ -1,0 +1,9 @@
+.cards-field {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: (168px) [4];
+  -ms-grid-columns: (168px) [4];
+  grid-template: repeat(4, 168px) / repeat(4, 168px);
+  gap: 24px 14px;
+}
+/*# sourceMappingURL=cards-field.css.map */

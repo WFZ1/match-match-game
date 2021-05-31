@@ -1,0 +1,31 @@
+.register-form {
+  display: grid;
+  gap: 16px;
+  padding: 33px 19px 26px 21px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #fafafa;
+}
+
+.register-form__field {
+  grid-column: 1 / 2;
+}
+
+.register-form__img {
+  grid-column: 2 / 4;
+  grid-row: 1 / 4;
+  margin-left: 22px;
+}
+
+.register-form__btn {
+  margin-top: 90px;
+}
+
+.register-form__add-user {
+  grid-column: 2 / 3;
+  margin-left: 37px;
+}
+
+.register-form__cancel {
+  grid-column: 3 / 4;
+}

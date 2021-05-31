@@ -1,5 +1,5 @@
 import './header.scss';
-import BaseComponent from "../base-component";
+import BaseComponent from '../base-component';
 import Logo from '../logo/logo';
 import Nav from '../nav/nav';
 import RegisterBtn from '../register-btn/register-btn';
@@ -10,11 +10,16 @@ export default class Header extends BaseComponent {
     this.render();
   }
 
-  render() {
-    const headerContainer = BaseComponent.createElement('div', ['header__container']);
+  render(): void {
+    const headerContainer = BaseComponent.createElement('div', [
+      'header__container',
+    ]);
     const logo = new Logo();
     const nav = new Nav();
-    const registerBtn = new RegisterBtn();
+    const registerBtn = new RegisterBtn(
+      ['header__register-btn'],
+      'register new player',
+    );
 
     this.el.append(headerContainer);
     headerContainer.append(logo.el, nav.el, registerBtn.el);

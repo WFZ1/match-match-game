@@ -21,16 +21,16 @@ export default class Nav extends BaseComponent {
   }
 
   // Get nav items list from 'nav-items.json' file
-  async getItemsList (): Promise<void> {
+  async getItemsList(): Promise<void> {
     const data = await fetch('./nav-items.json');
     const listNavItems: NavItemModel[] = await data.json();
 
     this.addItems(listNavItems);
   }
 
-  addItems (listNavItems: NavItemModel[]): void {
+  addItems(listNavItems: NavItemModel[]): void {
     listNavItems.forEach((item) => {
-      item.image = `assets/icons/${ item.image }`;  // set path to image
+      item.image = `assets/icons/${item.image}`; // set path to image
 
       const navItem = new NavItem(item);
       this.list.append(navItem.el);
@@ -42,7 +42,11 @@ export default class Nav extends BaseComponent {
     });
   }
 
-  changeRoute(navItem: NavItem) {
+  changeRoute(navItem: NavItem): void {
+    for (let i = 0; i < this.list.children.length; i++) {
+      this.list.children[i].classList.remove('nav-item_active');
+    }
+
     const url = navItem.link.href;
     const index = url.lastIndexOf('/') + 1; // index of begin the page name
     const pageName = url.slice(index);

@@ -33,22 +33,32 @@ export default class App extends BaseComponent {
     this.addRoutes();
 
     this.game = new Game();
-    //this.main.append(this.game.el);
+
+    // this.main.append(this.game.el);
 
     this.pageAbout = new PageAbout(this.main);
   }
 
-  addRoutes() {
+  addRoutes(): void {
     this.router
       .add('', () => {
         this.main.innerHTML = '';
         this.pageAbout.render();
+        this.header.el
+          .querySelectorAll('.nav-item')[0]
+          .classList.add('nav-item_active');
       })
       .add('score', () => {
         this.main.innerText = 'Welcome in best score page!';
+        this.header.el
+          .querySelectorAll('.nav-item')[1]
+          .classList.add('nav-item_active');
       })
       .add('settings', () => {
         this.main.innerText = 'Welcome in game settings page!';
+        this.header.el
+          .querySelectorAll('.nav-item')[2]
+          .classList.add('nav-item_active');
       });
   }
 

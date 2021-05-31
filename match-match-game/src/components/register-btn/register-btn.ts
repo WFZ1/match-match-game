@@ -1,9 +1,8 @@
-import './register-btn.scss'
-import BaseComponent from "../base-component";
+import './register-btn.scss';
+import Btn from '../btn/btn';
 
-export default class RegisterBtn extends BaseComponent {
-  constructor () {
-    super('button', ['register-btn', 'btn', 'header__register-btn']);
-    this.el.innerText = 'register new player';
+export default class RegisterBtn extends Btn {
+  constructor(classes: string[], text: string) {
+    super(['register-btn', ...classes], text);
   }
 }

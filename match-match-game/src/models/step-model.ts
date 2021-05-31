@@ -1,5 +1,5 @@
 export default interface StepModel {
-  id: number,
-  text: string,
-  image: string
+  id: number;
+  text: string;
+  image: string;
 }

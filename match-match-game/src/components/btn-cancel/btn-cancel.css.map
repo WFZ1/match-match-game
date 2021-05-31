@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC;EACV,KAAK,EAAE,OAAO;EACd,gBAAgB,EAAE,OAAO;EACzB,UAAU,EAAE,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,mBAAmB,EAAE,CAAC,CAAC,GAAG,CAAC,GAAG,CAAC,mBAAmB;CACvE",
+    "sources": [
+        "btn-cancel.scss"
+    ],
+    "names": [],
+    "file": "btn-cancel.css"
+}
