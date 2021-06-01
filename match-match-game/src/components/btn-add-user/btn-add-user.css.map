@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,aAAa,CAAC;EACZ,KAAK,EAAE,IAAI;EACX,gBAAgB,EAAE,OAAO;EACzB,UAAU,EAAE,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,mBAAmB,EAAE,CAAC,CAAC,GAAG,CAAC,GAAG,CAAC,mBAAmB;CACvE",
-    "sources": [
-        "btn-add-user.scss"
-    ],
-    "names": [],
-    "file": "btn-add-user.css"
-}

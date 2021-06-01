@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,aAAa,CAAC;EACZ,KAAK,EAAE,OAAO;EACd,gBAAgB,EAAE,OAAO;EACzB,UAAU,EAAE,CAAC,CAAC,GAAG,CAAC,GAAG,CAAC,kBAAkB,EAAE,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,mBAAmB,EACtE,CAAC,CAAC,GAAG,CAAC,IAAI,CAAC,mBAAmB;CACjC",
-    "sources": [
-        "register-btn.scss"
-    ],
-    "names": [],
-    "file": "register-btn.css"
-}

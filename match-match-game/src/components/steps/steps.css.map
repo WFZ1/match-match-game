@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,MAAM,CAAC;EACL,SAAS,EAAE,MAAM;EACjB,MAAM,EAAE,MAAM;EACd,OAAO,EAAE,cAAc;EACvB,gBAAgB,EAAE,mBAAmB;EACrC,aAAa,EAAE,GAAG;CACnB;;AAED,AAAA,aAAa,CAAC;EACZ,UAAU,EAAE,CAAC;EACb,aAAa,EAAE,IAAI;EACnB,WAAW,EAAE,GAAG;EAChB,SAAS,EAAE,IAAI;EACf,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,MAAM;EACtB,KAAK,EAAE,mBAAmB;CAC3B",
-    "sources": [
-        "steps.scss"
-    ],
-    "names": [],
-    "file": "steps.css"
-}
