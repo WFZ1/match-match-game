@@ -1,8 +1,9 @@
 import './nav.scss';
-import BaseComponent from '../base-component';
+import BaseComponent from '../base/base-component';
 import NavItem from '../nav-item/nav-item';
-import NavItemModel from '../../models/nav-item-model';
-import Router from '../router/router';
+import INavItem from '../../types/nav-item.type';
+import Router from '../base/router';
+import createElement from '../../shared/create-element';
 
 export default class Nav extends BaseComponent {
   private readonly list;
@@ -14,7 +15,7 @@ export default class Nav extends BaseComponent {
 
     this.router = new Router({});
 
-    this.list = BaseComponent.createElement('ul', ['nav__list']);
+    this.list = createElement('ul', ['nav__list']);
     this.el.append(this.list);
 
     this.getItemsList();
@@ -23,12 +24,12 @@ export default class Nav extends BaseComponent {
   // Get nav items list from 'nav-items.json' file
   async getItemsList(): Promise<void> {
     const data = await fetch('./nav-items.json');
-    const listNavItems: NavItemModel[] = await data.json();
+    const listNavItems: INavItem[] = await data.json();
 
     this.addItems(listNavItems);
   }
 
-  addItems(listNavItems: NavItemModel[]): void {
+  addItems(listNavItems: INavItem[]): void {
     listNavItems.forEach((item) => {
       item.image = `assets/icons/${item.image}`; // set path to image
 

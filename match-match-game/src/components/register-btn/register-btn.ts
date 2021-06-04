@@ -1,5 +1,5 @@
 import './register-btn.scss';
-import Btn from '../btn/btn';
+import Btn from '../base/btn/btn';
 
 export default class RegisterBtn extends Btn {
   constructor(classes: string[], text: string) {

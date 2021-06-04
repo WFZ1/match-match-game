@@ -1,14 +1,13 @@
 import './header.scss';
-import BaseComponent from '../base-component';
+import BaseComponent from '../base/base-component';
 import Logo from '../logo/logo';
 import Nav from '../nav/nav';
 import RegisterBtn from '../register-btn/register-btn';
 import UserAvatar from '../user-avatar/user-avatar';
 import BtnStartGame from '../btn-start-game/btn-start-game';
+import createElement from '../../shared/create-element';
 
-export class Header {
-  readonly el;
-
+export class Header extends BaseComponent {
   private readonly container;
 
   private readonly logo;
@@ -22,8 +21,8 @@ export class Header {
   readonly userAvatar;
 
   constructor() {
-    this.el = BaseComponent.createElement('header', ['header']);
-    this.container = BaseComponent.createElement('div', ['header__container']);
+    super('header', ['header']);
+    this.container = createElement('div', ['header__container']);
     this.logo = new Logo();
     this.nav = new Nav();
     this.registerBtn = new RegisterBtn(

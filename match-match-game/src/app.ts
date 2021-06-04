@@ -1,9 +1,10 @@
-import BaseComponent from './components/base-component';
-import Router from './components/router/router';
+import BaseComponent from './components/base/base-component';
+import Router from './components/base/router';
 import header from './components/header/header';
 import Game from './components/game/game';
-import ImageCategoryModel from './models/image-category-model';
+import IImageCategory from './types/image-category.type';
 import PageAbout from './components/page-about/page-about';
+import createElement from './shared/create-element';
 
 export default class App extends BaseComponent {
   private readonly router;
@@ -20,7 +21,7 @@ export default class App extends BaseComponent {
     super();
 
     this.header = header;
-    this.main = BaseComponent.createElement('main', ['main']);
+    this.main = createElement('main', ['main']);
 
     this.rootEl.append(this.header.el);
     this.rootEl.append(this.main);
@@ -66,7 +67,7 @@ export default class App extends BaseComponent {
     // Get images list from 'images.json' file
 
     const data = await fetch('./images.json');
-    const categories: ImageCategoryModel[] = await data.json();
+    const categories: IImageCategory[] = await data.json();
 
     // Choose category images. For this moment it is 'Animals'
 

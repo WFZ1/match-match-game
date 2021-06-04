@@ -1,6 +1,7 @@
 import './register-popup.scss';
-import BaseComponent from '../base-component';
+import BaseComponent from '../base/base-component';
 import RegisterForm from '../register-form/register-form';
+import createElement from '../../shared/create-element';
 
 const FIELDS = [
   {
@@ -33,7 +34,7 @@ export default class RegisterPopup extends BaseComponent {
 
   constructor(title: string, btnSelector: string) {
     super('div', ['register-popup', HIDDEN_CLASS]);
-    this.container = BaseComponent.createElement('div', [
+    this.container = createElement('div', [
       'register-popup__container',
     ]) as HTMLDivElement;
     this.form = new RegisterForm(['register-popup__form'], this);
@@ -42,7 +43,7 @@ export default class RegisterPopup extends BaseComponent {
   }
 
   static addTitle(text: string): HTMLHeadingElement {
-    const title = BaseComponent.createElement('h3', [
+    const title = createElement('h3', [
       'register-popup__title',
     ]) as HTMLHeadingElement;
     title.innerText = text;

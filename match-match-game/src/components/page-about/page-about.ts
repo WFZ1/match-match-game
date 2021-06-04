@@ -1,7 +1,7 @@
 import './page-about.scss';
 import getData from '../../shared/get-data';
 import Steps from '../steps/steps';
-import StepModel from '../../models/step-model';
+import IStep from '../../types/step.type';
 import RegisterPopup from '../register-popup/register-popup';
 
 export default class PageAbout {
@@ -29,7 +29,7 @@ export default class PageAbout {
 
     const data = await getData('./steps.json');
 
-    data.forEach((step: StepModel) => {
+    data.forEach((step: IStep) => {
       const image = `./assets/images/steps/${step.image}`;
       this.steps.addStep(step.text, image);
     });

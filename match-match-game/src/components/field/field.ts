@@ -1,5 +1,6 @@
 import './field.scss';
-import BaseComponent from '../base-component';
+import BaseComponent from '../base/base-component';
+import createElement from '../../shared/create-element';
 
 const VALIDATION = {
   onlyNumbs: /^\d+$/,
@@ -52,17 +53,13 @@ export default class Field extends BaseComponent {
   }
 
   private createLabel() {
-    const label = BaseComponent.createElement('label', [
-      'field__label',
-    ]) as HTMLLabelElement;
+    const label = createElement('label', ['field__label']) as HTMLLabelElement;
     label.innerText = this.label;
     return label;
   }
 
   private createInput() {
-    const input = BaseComponent.createElement('input', [
-      'field__input',
-    ]) as HTMLInputElement;
+    const input = createElement('input', ['field__input']) as HTMLInputElement;
     input.setAttribute('type', this.type);
     input.setAttribute('name', this.name);
     input.setAttribute('maxlength', '30');
@@ -73,9 +70,7 @@ export default class Field extends BaseComponent {
   render(): void {
     const label = this.createLabel();
     const input = this.createInput();
-    const checker = BaseComponent.createElement('div', [
-      'field__checker',
-    ]) as HTMLElement;
+    const checker = createElement('div', ['field__checker']) as HTMLElement;
     this.attachListeners();
 
     this.el.append(label, input, checker);

@@ -1,10 +1,10 @@
-import Store from './models/store';
-import Player from './models/player';
+import IStore from '../../types/store.type';
+import IPlayer from '../../types/player.type';
 
 export default class Database {
   public db?: IDBDatabase;
 
-  constructor(private dbName: string, public stores: Store[]) {
+  constructor(private dbName: string, public stores: IStore[]) {
     this.OpenInitDB();
   }
 
@@ -25,7 +25,7 @@ export default class Database {
     };
   }
 
-  addStores(e: Event, stores: Store[]): void {
+  addStores(e: Event, stores: IStore[]): void {
     this.db = (e.target as IDBOpenDBRequest).result;
 
     stores.forEach((store) => {
@@ -38,7 +38,7 @@ export default class Database {
     });
   }
 
-  addData(store: string, player: Player): void {
+  addData(store: string, player: IPlayer): void {
     if (!this.db) return;
 
     const trans = this.db.transaction(store, 'readwrite');

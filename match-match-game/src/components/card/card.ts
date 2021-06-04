@@ -1,5 +1,6 @@
 import './card.scss';
-import BaseComponent from '../base-component';
+import BaseComponent from '../base/base-component';
+import createElement from '../../shared/create-element';
 
 const FLIP_CLASS = 'card_flipped';
 
@@ -17,14 +18,12 @@ export default class Card extends BaseComponent {
   constructor(readonly imageSrc: string) {
     super('div', ['card']);
 
-    this.cardContainer = BaseComponent.createElement('div', [
-      'card__container',
-    ]);
-    this.cardFront = BaseComponent.createElement('div', ['card__front']);
-    this.cardFrontImg = BaseComponent.createElement('img', [
+    this.cardContainer = createElement('div', ['card__container']);
+    this.cardFront = createElement('div', ['card__front']);
+    this.cardFrontImg = createElement('img', [
       'card__front-img',
     ]) as HTMLImageElement;
-    this.cardBack = BaseComponent.createElement('div', ['card__back']);
+    this.cardBack = createElement('div', ['card__back']);
 
     this.cardFront.append(this.cardFrontImg);
     this.cardContainer.append(this.cardFront, this.cardBack);

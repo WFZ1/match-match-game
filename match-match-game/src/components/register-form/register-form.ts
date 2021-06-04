@@ -1,12 +1,13 @@
 import './register-form.scss';
-import BaseComponent from '../base-component';
+import BaseComponent from '../base/base-component';
 import BtnAddUser from '../btn-add-user/btn-add-user';
 import BtnCancel from '../btn-cancel/btn-cancel';
-import Btn from '../btn/btn';
+import Btn from '../base/btn/btn';
 import Field from '../field/field';
-import Database from '../../database';
+import Database from '../base/database';
 import type RegisterPopup from '../register-popup/register-popup';
 import header from '../header/header';
+import createElement from '../../shared/create-element';
 
 const FIELD_VALID_CLASS = 'field__valid';
 const BTN_CLASS = 'register-form__btn';
@@ -66,7 +67,7 @@ export default class RegisterForm extends BaseComponent {
   }
 
   static addAvatar(image: string): HTMLImageElement {
-    const avatar = BaseComponent.createElement('img', [
+    const avatar = createElement('img', [
       'register-form__img',
     ]) as HTMLImageElement;
     avatar.src = image;

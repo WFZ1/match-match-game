@@ -1,11 +1,5 @@
-interface IRouterOpts {
-  [key: string]: string;
-}
-
-interface IRout {
-  path: string;
-  callback: () => void;
-}
+import IRout from '../../types/rout.type';
+import IRouterOpts from '../../types/router-opts.type';
 
 export default class Router {
   private rout?: Router; // singleton pattern
