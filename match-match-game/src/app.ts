@@ -1,6 +1,6 @@
 import BaseComponent from './components/base-component';
 import Router from './components/router/router';
-import Header from './components/header/header';
+import header from './components/header/header';
 import Game from './components/game/game';
 import ImageCategoryModel from './models/image-category-model';
 import PageAbout from './components/page-about/page-about';
@@ -19,7 +19,7 @@ export default class App extends BaseComponent {
   constructor(private readonly rootEl: HTMLElement) {
     super();
 
-    this.header = new Header();
+    this.header = header;
     this.main = BaseComponent.createElement('main', ['main']);
 
     this.rootEl.append(this.header.el);

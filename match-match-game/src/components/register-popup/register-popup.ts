@@ -6,14 +6,17 @@ const FIELDS = [
   {
     label: 'First Name',
     type: 'text',
+    name: 'first-name',
   },
   {
     label: 'Last Name',
     type: 'text',
+    name: 'last-name',
   },
   {
     label: 'E-mail',
     type: 'email',
+    name: 'email',
   },
 ];
 
@@ -33,7 +36,7 @@ export default class RegisterPopup extends BaseComponent {
     this.container = BaseComponent.createElement('div', [
       'register-popup__container',
     ]) as HTMLDivElement;
-    this.form = new RegisterForm(['register-popup__form']);
+    this.form = new RegisterForm(['register-popup__form'], this);
     this.title = RegisterPopup.addTitle(title);
     this.btn = document.querySelector(btnSelector);
   }
@@ -48,21 +51,25 @@ export default class RegisterPopup extends BaseComponent {
 
   private attachListeners() {
     this.btn?.addEventListener('click', () => this.showPopup());
-    this.el.addEventListener('click', (e) => this.hidePopup(e));
+    this.el.addEventListener('click', (e) => this.checkClickIsOutside(e));
   }
 
   private showPopup() {
     this.el.classList.remove(HIDDEN_CLASS);
   }
 
-  private hidePopup(e: Event) {
-    if (e.target === this.el) {
-      this.el.classList.add(HIDDEN_CLASS);
-    }
+  private checkClickIsOutside(e: Event) {
+    if (e.target === this.el) this.hidePopup();
+  }
+
+  hidePopup(): void {
+    this.el.classList.add(HIDDEN_CLASS);
   }
 
   render(): void {
-    FIELDS.forEach((field) => this.form.addField(field.label, field.type));
+    FIELDS.forEach((field) =>
+      this.form.addField(field.label, field.type, field.name),
+    );
 
     this.form.addButton('submit', 'add user');
     this.form.addButton('reset', 'cancel');

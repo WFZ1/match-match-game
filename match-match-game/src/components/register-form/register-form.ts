@@ -4,9 +4,31 @@ import BtnAddUser from '../btn-add-user/btn-add-user';
 import BtnCancel from '../btn-cancel/btn-cancel';
 import Btn from '../btn/btn';
 import Field from '../field/field';
+import Database from '../../database';
+import type RegisterPopup from '../register-popup/register-popup';
+import header from '../header/header';
 
-const FIELD_CLASS = 'register-form__field';
-const AVATAR = './assets/images/player/avatar.png';
+const FIELD_VALID_CLASS = 'field__valid';
+const BTN_CLASS = 'register-form__btn';
+
+const AVATAR_SRC = './assets/images/player/avatar.png';
+
+const DB_STORES = [
+  {
+    name: 'players',
+    options: {
+      key: 'id',
+      autoIncrement: true,
+    },
+  },
+  {
+    name: 'best-players',
+    options: {
+      key: 'id',
+      autoIncrement: true,
+    },
+  },
+];
 
 export default class RegisterForm extends BaseComponent {
   private readonly fields: Field[] = [];
@@ -15,13 +37,16 @@ export default class RegisterForm extends BaseComponent {
 
   private avatar: HTMLImageElement;
 
-  constructor(classes: string[]) {
+  private db: Database;
+
+  constructor(classes: string[], private popup: RegisterPopup) {
     super('form', ['register-form', ...classes]);
-    this.avatar = RegisterForm.addAvatar(AVATAR);
+    this.avatar = RegisterForm.addAvatar(AVATAR_SRC);
+    this.db = new Database('WFZ1', DB_STORES);
   }
 
-  addField(label: string, type: string): void {
-    const field = new Field(label, type, [FIELD_CLASS]);
+  addField(label: string, type: string, name: string): void {
+    const field = new Field(label, type, name, ['register-form__field']);
     field.render();
     this.fields.push(field);
   }
@@ -30,17 +55,11 @@ export default class RegisterForm extends BaseComponent {
     let btn;
 
     if (type === 'submit') {
-      btn = new BtnAddUser(
-        ['register-form__btn', 'register-form__add-user'],
-        text,
-      );
-      btn.attachHandler(RegisterForm.addPlayer);
+      btn = new BtnAddUser([BTN_CLASS, 'register-form__add-user'], text);
+      btn.attachHandler((e) => this.addPlayer.call(this, e));
     } else {
-      btn = new BtnCancel(
-        ['register-form__btn', 'register-form__cancel'],
-        text,
-      );
-      btn.attachHandler(RegisterForm.clearFields);
+      btn = new BtnCancel([BTN_CLASS, 'register-form__cancel'], text);
+      btn.attachHandler(() => this.clearFields.call(this));
     }
 
     this.btns.push(btn);
@@ -58,17 +77,46 @@ export default class RegisterForm extends BaseComponent {
     this.avatar.src = image;
   }
 
-  static clearFields(e: Event): void {
-    const btn = e.currentTarget as HTMLElement | null;
-    const form = btn?.parentElement;
-    const fields = form?.querySelectorAll('.field');
-
-    fields?.forEach((el) => {
-      el.classList.remove('field__valid');
-    });
+  clearFields(): void {
+    this.fields.forEach((field) =>
+      field.el.classList.remove(FIELD_VALID_CLASS),
+    );
   }
 
-  static addPlayer(): void {}
+  checkValidation(): boolean {
+    for (let i = 0; i < this.fields.length; i++) {
+      if (!this.fields[i].el.matches(`.${FIELD_VALID_CLASS}`)) return false;
+    }
+
+    return true;
+  }
+
+  addPlayer(e: Event): void {
+    e.preventDefault();
+
+    const isValid = this.checkValidation();
+    if (!isValid) return;
+
+    const data: { [key: string]: string } = {};
+
+    this.fields.forEach((field) => {
+      const input: HTMLInputElement | null =
+        field.el.querySelector('.field__input');
+      if (input) data[input.name] = input.value;
+    });
+
+    const player = {
+      fullName: `${data['first-name']} ${data['last-name']}`,
+      email: data.email,
+    };
+
+    this.db.addData('players', player);
+
+    this.popup.hidePopup();
+
+    header.renderUserPart();
+    header.userAvatar.setPhoto(AVATAR_SRC);
+  }
 
   render(): void {
     this.fields.forEach((field) => this.el.append(field.el));

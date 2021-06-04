@@ -15,10 +15,13 @@ export default class Field extends BaseComponent {
 
   private readonly type: string;
 
-  constructor(label: string, type: string, classes: string[]) {
+  private readonly name: string;
+
+  constructor(label: string, type: string, name: string, classes: string[]) {
     super('div', ['field', ...classes]);
     this.label = label;
     this.type = type;
+    this.name = name;
   }
 
   attachListeners(): void {
@@ -61,6 +64,7 @@ export default class Field extends BaseComponent {
       'field__input',
     ]) as HTMLInputElement;
     input.setAttribute('type', this.type);
+    input.setAttribute('name', this.name);
     input.setAttribute('maxlength', '30');
     input.setAttribute('required', 'required');
     return input;
