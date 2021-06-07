@@ -2,10 +2,12 @@ import './cards-field.scss';
 import BaseComponent from '../base/base-component';
 import Card from '../card/card';
 
-const SHOW_TIME = 3; // time before cards flip back
-
 export default class CardsField extends BaseComponent {
-  private cards: Card[] = [];
+  cards: Card[] = [];
+
+  readonly showTime = 3000; // time before cards flip back
+
+  fieldSize = 16;
 
   constructor() {
     super('div', ['cards-field']);
@@ -22,6 +24,6 @@ export default class CardsField extends BaseComponent {
 
     setTimeout(() => {
       this.cards.forEach((card) => card.flipToBack());
-    }, SHOW_TIME * 1000);
+    }, this.showTime);
   }
 }

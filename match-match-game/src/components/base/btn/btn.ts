@@ -4,7 +4,7 @@ import BaseComponent from '../base-component';
 export default class Btn extends BaseComponent {
   constructor(classes: string[], text: string, type = 'button') {
     super('button', ['btn', ...classes]);
-    this.el.innerText = text;
+    this.el.textContent = text;
     this.el.setAttribute('type', type);
   }
 

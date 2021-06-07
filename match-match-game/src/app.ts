@@ -1,30 +1,27 @@
-import BaseComponent from './components/base/base-component';
 import Router from './components/base/router';
 import header from './components/header/header';
-import Game from './components/game/game';
-import IImageCategory from './types/image-category.type';
 import PageAbout from './components/page-about/page-about';
+import game from './components/game/game';
 import createElement from './shared/create-element';
 
-export default class App extends BaseComponent {
-  private readonly router;
+const ROOT = document.body;
 
+export class App {
   private readonly header;
 
-  private readonly main;
+  readonly main;
 
   private readonly pageAbout;
 
-  private readonly game: Game;
+  private readonly router;
 
   constructor(private readonly rootEl: HTMLElement) {
-    super();
-
     this.header = header;
     this.main = createElement('main', ['main']);
 
-    this.rootEl.append(this.header.el);
-    this.rootEl.append(this.main);
+    this.render();
+
+    this.pageAbout = new PageAbout(this.main);
 
     this.router = new Router({
       mode: 'history',
@@ -32,50 +29,38 @@ export default class App extends BaseComponent {
     });
 
     this.addRoutes();
+  }
 
-    this.game = new Game();
+  render(): void {
+    this.rootEl.append(this.header.el, this.main);
+  }
 
-    // this.main.append(this.game.el);
-
-    this.pageAbout = new PageAbout(this.main);
+  clearMainArea (): void {
+    this.main.innerHTML = '';
   }
 
   addRoutes(): void {
     this.router
       .add('', () => {
-        this.main.innerHTML = '';
+        this.clearMainArea();
         this.pageAbout.render();
-        this.header.el
-          .querySelectorAll('.nav-item')[0]
-          .classList.add('nav-item_active');
+        this.header.nav.navItems[0].el.classList.add('nav-item_active');
+      })
+      .add('game', () => {
+        this.clearMainArea();
+        app.main.append(game.el);
+        this.header.nav.navItems.forEach((navItem) => navItem.el.classList.remove('nav-item_active'));
       })
       .add('score', () => {
         this.main.innerText = 'Welcome in best score page!';
-        this.header.el
-          .querySelectorAll('.nav-item')[1]
-          .classList.add('nav-item_active');
+        this.header.nav.navItems[1].el.classList.add('nav-item_active');
       })
       .add('settings', () => {
         this.main.innerText = 'Welcome in game settings page!';
-        this.header.el
-          .querySelectorAll('.nav-item')[2]
-          .classList.add('nav-item_active');
+        this.header.nav.navItems[2].el.classList.add('nav-item_active');
       });
   }
-
-  async start(): Promise<void> {
-    // Get images list from 'images.json' file
-
-    const data = await fetch('./images.json');
-    const categories: IImageCategory[] = await data.json();
-
-    // Choose category images. For this moment it is 'Animals'
-
-    const cat = categories[0];
-    const images = cat.images.map(
-      (name) => `assets/images/${cat.category}/${name}`,
-    );
-
-    this.game.start(images);
-  }
 }
+
+const app = new App(ROOT);
+export default app;

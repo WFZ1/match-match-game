@@ -8,6 +8,8 @@ import createElement from '../../shared/create-element';
 export default class Nav extends BaseComponent {
   private readonly list;
 
+  readonly navItems: NavItem[] = [];
+
   private readonly router: Router;
 
   constructor() {
@@ -35,18 +37,15 @@ export default class Nav extends BaseComponent {
 
       const navItem = new NavItem(item);
       this.list.append(navItem.el);
+      this.navItems.push(navItem);
 
-      navItem.el.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.changeRoute(navItem);
-      });
+      navItem.el.addEventListener('click', (e) => this.changeRoute(e, navItem));
     });
   }
 
-  changeRoute(navItem: NavItem): void {
-    for (let i = 0; i < this.list.children.length; i++) {
-      this.list.children[i].classList.remove('nav-item_active');
-    }
+  changeRoute(e: Event, navItem: NavItem): void {
+    e.preventDefault();
+    this.navItems.forEach((navItem) => navItem.el.classList.remove('nav-item_active'));
 
     const url = navItem.link.href;
     const index = url.lastIndexOf('/') + 1; // index of begin the page name

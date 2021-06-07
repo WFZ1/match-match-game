@@ -1,0 +1,14 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px 20px 118px;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.game__game-time {
+  margin-bottom: 60px;
+}

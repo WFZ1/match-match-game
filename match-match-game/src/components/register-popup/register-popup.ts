@@ -1,5 +1,5 @@
 import './register-popup.scss';
-import BaseComponent from '../base/base-component';
+import Popup from '../base/popup/popup';
 import RegisterForm from '../register-form/register-form';
 import createElement from '../../shared/create-element';
 
@@ -21,11 +21,7 @@ const FIELDS = [
   },
 ];
 
-const HIDDEN_CLASS = 'register-popup_hidden';
-
-export default class RegisterPopup extends BaseComponent {
-  private readonly container: HTMLDivElement;
-
+export default class RegisterPopup extends Popup {
   private readonly form: RegisterForm;
 
   private readonly title: HTMLHeadingElement;
@@ -33,10 +29,7 @@ export default class RegisterPopup extends BaseComponent {
   private readonly btn: HTMLButtonElement | null;
 
   constructor(title: string, btnSelector: string) {
-    super('div', ['register-popup', HIDDEN_CLASS]);
-    this.container = createElement('div', [
-      'register-popup__container',
-    ]) as HTMLDivElement;
+    super(['register-popup'], 'register-popup__container');
     this.form = new RegisterForm(['register-popup__form'], this);
     this.title = RegisterPopup.addTitle(title);
     this.btn = document.querySelector(btnSelector);
@@ -46,25 +39,13 @@ export default class RegisterPopup extends BaseComponent {
     const title = createElement('h3', [
       'register-popup__title',
     ]) as HTMLHeadingElement;
-    title.innerText = text;
+    title.textContent = text;
     return title;
   }
 
-  private attachListeners() {
+  protected attachListeners(): void {
     this.btn?.addEventListener('click', () => this.showPopup());
     this.el.addEventListener('click', (e) => this.checkClickIsOutside(e));
-  }
-
-  private showPopup() {
-    this.el.classList.remove(HIDDEN_CLASS);
-  }
-
-  private checkClickIsOutside(e: Event) {
-    if (e.target === this.el) this.hidePopup();
-  }
-
-  hidePopup(): void {
-    this.el.classList.add(HIDDEN_CLASS);
   }
 
   render(): void {
@@ -77,8 +58,8 @@ export default class RegisterPopup extends BaseComponent {
 
     this.form.render();
 
-    this.container.append(this.title, this.form.el);
     this.el.append(this.container);
+    this.container.append(this.title, this.form.el);
 
     this.attachListeners();
   }

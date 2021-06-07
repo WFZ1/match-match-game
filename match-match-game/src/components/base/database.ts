@@ -1,18 +1,38 @@
 import IStore from '../../types/store.type';
 import IPlayer from '../../types/player.type';
 
-export default class Database {
+const DB_NAME = 'WFZ1';
+const DB_STORES = [
+  {
+    name: 'players',
+    options: {
+      key: 'id',
+      autoIncrement: true,
+    },
+  },
+  {
+    name: 'best-players',
+    options: {
+      key: 'id',
+      autoIncrement: true,
+    },
+  },
+];
+
+class Database {
   public db?: IDBDatabase;
 
-  constructor(private dbName: string, public stores: IStore[]) {
+  players: IPlayer[] | IDBDatabase = [];
+
+  constructor() {
     this.OpenInitDB();
   }
 
   OpenInitDB(): void {
-    const req = window.indexedDB.open(this.dbName, 1);
+    const req = window.indexedDB.open(DB_NAME, 1);
 
     // Create db and objects of stores
-    req.onupgradeneeded = (e) => this.addStores(e, this.stores);
+    req.onupgradeneeded = (e) => this.addStores(e);
 
     req.onsuccess = (e: Event): void => {
       // If db is exist, onupgradeneeded won't be in progress, it means need to do initialization this.db here
@@ -25,10 +45,10 @@ export default class Database {
     };
   }
 
-  addStores(e: Event, stores: IStore[]): void {
+  addStores(e: Event): void {
     this.db = (e.target as IDBOpenDBRequest).result;
 
-    stores.forEach((store) => {
+    DB_STORES.forEach((store) => {
       const parms = {
         keyPath: store.options.key,
         autoIncrement: store.options.autoIncrement,
@@ -43,7 +63,7 @@ export default class Database {
 
     const trans = this.db.transaction(store, 'readwrite');
     const players = trans.objectStore(store);
-    const req = players.add(player);
+    const req = players.put(player);
 
     req.onsuccess = () => {
       // console.log('Player added', req.result);
@@ -52,5 +72,19 @@ export default class Database {
     req.onerror = () => {
       // console.log('Error', req.error);
     };
+
+    if (store === 'players') {
+      players.getAll().onsuccess = (e: Event) => {
+        this.players = (e.target  as IDBOpenDBRequest).result;
+      };
+    }
+  }
+
+  getLastPlayer(): IPlayer {
+    const arr = this.players as [];
+    return arr[arr.length - 1];
   }
 }
+
+const db = new Database();
+export default db;

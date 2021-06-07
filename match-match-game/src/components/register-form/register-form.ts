@@ -4,7 +4,7 @@ import BtnAddUser from '../btn-add-user/btn-add-user';
 import BtnCancel from '../btn-cancel/btn-cancel';
 import Btn from '../base/btn/btn';
 import Field from '../field/field';
-import Database from '../base/database';
+import db from '../base/database';
 import type RegisterPopup from '../register-popup/register-popup';
 import header from '../header/header';
 import createElement from '../../shared/create-element';
@@ -14,23 +14,6 @@ const BTN_CLASS = 'register-form__btn';
 
 const AVATAR_SRC = './assets/images/player/avatar.png';
 
-const DB_STORES = [
-  {
-    name: 'players',
-    options: {
-      key: 'id',
-      autoIncrement: true,
-    },
-  },
-  {
-    name: 'best-players',
-    options: {
-      key: 'id',
-      autoIncrement: true,
-    },
-  },
-];
-
 export default class RegisterForm extends BaseComponent {
   private readonly fields: Field[] = [];
 
@@ -38,12 +21,9 @@ export default class RegisterForm extends BaseComponent {
 
   private avatar: HTMLImageElement;
 
-  private db: Database;
-
   constructor(classes: string[], private popup: RegisterPopup) {
     super('form', ['register-form', ...classes]);
     this.avatar = RegisterForm.addAvatar(AVATAR_SRC);
-    this.db = new Database('WFZ1', DB_STORES);
   }
 
   addField(label: string, type: string, name: string): void {
@@ -111,7 +91,7 @@ export default class RegisterForm extends BaseComponent {
       email: data.email,
     };
 
-    this.db.addData('players', player);
+    db.addData('players', player);
 
     this.popup.hidePopup();
 
