@@ -1,9 +1,7 @@
 import IRout from '../../types/rout.type';
 import IRouterOpts from '../../types/router-opts.type';
 
-export default class Router {
-  private rout?: Router; // singleton pattern
-
+class Router {
   private routes: IRout[] = []; // list of registered routes
 
   private readonly root: string = '/'; // for history mode
@@ -13,10 +11,6 @@ export default class Router {
   private curPage: string | undefined = undefined;
 
   constructor({ mode, root }: IRouterOpts) {
-    // Singleton pattern
-    if (this.rout) return this.rout;
-    this.rout = this;
-
     if (mode) this.mode = mode;
     if (root) this.root = root;
 
@@ -106,3 +100,6 @@ export default class Router {
     });
   }
 }
+
+const router = new Router({});
+export default router;

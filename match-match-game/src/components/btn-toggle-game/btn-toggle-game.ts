@@ -1,30 +1,33 @@
 import './btn-toggle-game.scss';
 import BaseComponent from '../base/base-component';
-import Router from '../base/router';
+import router from '../base/router';
 import game from '../game/game';
 
 const GAME_URL = 'game';
 const START_GAME = 'start game';
 const STOP_GAME = 'stop game';
 
-export default class BtnToggleGame extends BaseComponent {
+class BtnToggleGame extends BaseComponent {
   private isGameStart = false;
 
-  private readonly router: Router;
-
-  constructor(classes: string[]) {
-    super('a', ['btn-toggle-game', 'btn', ...classes]);
-    this.router = new Router({});
+  constructor() {
+    super('a', ['btn-toggle-game', 'btn']);
     this.render();
   }
 
-  render (): void {
+  private render(): void {
     this.el.textContent = START_GAME;
     this.el.setAttribute('href', GAME_URL);
     this.el.addEventListener('click', (e) => this.attachHandler(e));
+
+    game.attachHandlerGameCompleting(this.toggleGame.bind(this));
   }
 
-  toggleGame (): void {
+  addClasses(classes: string[]) {
+    this.el.classList.add(...classes);
+  }
+
+  toggleGame(): void {
     if (!this.isGameStart) {
       game.start();
       this.el.textContent = STOP_GAME;
@@ -36,15 +39,18 @@ export default class BtnToggleGame extends BaseComponent {
     }
   }
 
-  attachHandler(e: Event): void {
+  private attachHandler(e: Event): void {
     e.preventDefault();
 
     if (!this.isGameStart) {
-      this.router.navigate(GAME_URL);
+      router.navigate(GAME_URL);
     } else {
-      this.router.navigate('');
+      router.navigate('');
     }
 
     this.toggleGame();
   }
 }
+
+const btnToggleGame = new BtnToggleGame();
+export default btnToggleGame;

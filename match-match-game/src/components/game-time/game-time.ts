@@ -10,30 +10,30 @@ export default class GameTime extends BaseComponent {
 
   private sec: number | string = 0;
 
-  constructor (classes: string[]) {
+  constructor(classes: string[]) {
     super('span', ['game-time', ...classes]);
     this.render();
   }
 
-  render (): void {
+  render(): void {
     this.el.textContent = ZERO_TIME;
   }
 
-  start (): void {
+  start(): void {
     if (this.stoptime) {
       this.stoptime = false;
       this.updateTime();
     }
   }
 
-  stop (): void {
+  stop(): void {
     if (!this.stoptime) {
       this.stoptime = true;
     }
   }
 
-  updateTime (): void {
-    if (this.stoptime == false) {
+  updateTime(): void {
+    if (!this.stoptime) {
       this.sec = +this.sec;
       this.min = +this.min;
 
@@ -44,10 +44,10 @@ export default class GameTime extends BaseComponent {
         this.sec = 0;
       }
 
-      if (this.sec < 10 || this.sec == 0) this.sec = `0${ this.sec }`;
-      if (this.min < 10 || this.min == 0) this.min = `0${ this.min }`;
+      if (this.sec < 10 || this.sec === 0) this.sec = `0${this.sec}`;
+      if (this.min < 10 || this.min === 0) this.min = `0${this.min}`;
 
-      this.el.textContent = `${ this.min }:${ this.sec }`;
+      this.el.textContent = `${this.min}:${this.sec}`;
 
       setTimeout(() => this.updateTime(), 1000);
     }
@@ -60,7 +60,7 @@ export default class GameTime extends BaseComponent {
     };
   }
 
-  reset (): void {
+  reset(): void {
     this.min = 0;
     this.sec = 0;
     this.el.textContent = ZERO_TIME;

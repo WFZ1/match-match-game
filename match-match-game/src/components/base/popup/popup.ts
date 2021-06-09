@@ -5,7 +5,11 @@ import createElement from '../../../shared/create-element';
 export default class Popup extends BaseComponent {
   readonly container: HTMLElement;
 
-  constructor (classes: string[], containerClass: string, private readonly hiddenClass: string = 'popup_hidden') {
+  constructor(
+    classes: string[],
+    containerClass: string,
+    private readonly hiddenClass: string = 'popup_hidden',
+  ) {
     super('div', ['popup', ...classes, hiddenClass]);
     this.container = createElement('div', ['popup__container', containerClass]);
 
@@ -13,7 +17,7 @@ export default class Popup extends BaseComponent {
     this.attachListeners();
   }
 
-  private build (): void {
+  private build(): void {
     this.el.append(this.container);
   }
 

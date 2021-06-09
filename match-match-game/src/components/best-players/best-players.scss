@@ -1,0 +1,18 @@
+.best-players {
+  max-width: 1000px;
+  height: calc(100% - 111px);
+  margin: 0 auto;
+  padding: 48px 56px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.best-players__title {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0.15px;
+  color: #333;
+}

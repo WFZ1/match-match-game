@@ -1,19 +1,18 @@
-import Router from './components/base/router';
+import router from './components/base/router';
 import header from './components/header/header';
 import PageAbout from './components/page-about/page-about';
 import game from './components/game/game';
 import createElement from './shared/create-element';
+import PageBestScore from './components/page-best-score/page-best-score';
 
-const ROOT = document.body;
-
-export class App {
+export default class App {
   private readonly header;
 
   readonly main;
 
   private readonly pageAbout;
 
-  private readonly router;
+  private readonly pageBestScore;
 
   constructor(private readonly rootEl: HTMLElement) {
     this.header = header;
@@ -22,38 +21,46 @@ export class App {
     this.render();
 
     this.pageAbout = new PageAbout(this.main);
-
-    this.router = new Router({
-      mode: 'history',
-      root: '/',
-    });
-
-    this.addRoutes();
+    this.pageBestScore = new PageBestScore(this.main);
   }
 
   render(): void {
     this.rootEl.append(this.header.el, this.main);
   }
 
-  clearMainArea (): void {
+  clearMainArea(): void {
     this.main.innerHTML = '';
   }
 
   addRoutes(): void {
-    this.router
+    router
       .add('', () => {
         this.clearMainArea();
         this.pageAbout.render();
         this.header.nav.navItems[0].el.classList.add('nav-item_active');
+
+        // In the case if come after click to the stop button
+        header.nav.navItems.forEach((navItem) =>
+          navItem.el.classList.remove('nav-item_disabled'),
+        );
       })
       .add('game', () => {
         this.clearMainArea();
-        app.main.append(game.el);
-        this.header.nav.navItems.forEach((navItem) => navItem.el.classList.remove('nav-item_active'));
+        this.main.append(game.el);
+        this.header.nav.navItems.forEach((navItem) => {
+          navItem.el.classList.remove('nav-item_active');
+          navItem.el.classList.add('nav-item_disabled');
+        });
       })
       .add('score', () => {
-        this.main.innerText = 'Welcome in best score page!';
+        this.clearMainArea();
+        this.pageBestScore.render();
         this.header.nav.navItems[1].el.classList.add('nav-item_active');
+
+        // In the case if come after click to the ok button
+        header.nav.navItems.forEach((navItem) =>
+          navItem.el.classList.remove('nav-item_disabled'),
+        );
       })
       .add('settings', () => {
         this.main.innerText = 'Welcome in game settings page!';
@@ -61,6 +68,3 @@ export class App {
       });
   }
 }
-
-const app = new App(ROOT);
-export default app;

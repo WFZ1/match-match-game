@@ -9,7 +9,7 @@ export default class PageAbout {
 
   private readonly registerPopup: RegisterPopup;
 
-  private pageIsReady?: boolean = false;
+  private pageIsReady = false;
 
   constructor(private readonly rootEl: HTMLElement) {
     this.steps = new Steps();

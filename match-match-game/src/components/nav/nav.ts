@@ -2,7 +2,7 @@ import './nav.scss';
 import BaseComponent from '../base/base-component';
 import NavItem from '../nav-item/nav-item';
 import INavItem from '../../types/nav-item.type';
-import Router from '../base/router';
+import router from '../base/router';
 import createElement from '../../shared/create-element';
 
 export default class Nav extends BaseComponent {
@@ -10,12 +10,8 @@ export default class Nav extends BaseComponent {
 
   readonly navItems: NavItem[] = [];
 
-  private readonly router: Router;
-
   constructor() {
     super('nav', ['nav', 'header__nav']);
-
-    this.router = new Router({});
 
     this.list = createElement('ul', ['nav__list']);
     this.el.append(this.list);
@@ -45,12 +41,14 @@ export default class Nav extends BaseComponent {
 
   changeRoute(e: Event, navItem: NavItem): void {
     e.preventDefault();
-    this.navItems.forEach((navItem) => navItem.el.classList.remove('nav-item_active'));
+    this.navItems.forEach((item) =>
+      item.el.classList.remove('nav-item_active'),
+    );
 
     const url = navItem.link.href;
     const index = url.lastIndexOf('/') + 1; // index of begin the page name
     const pageName = url.slice(index);
 
-    this.router.navigate(pageName);
+    router.navigate(pageName);
   }
 }

@@ -32,7 +32,7 @@ export default class Card extends BaseComponent {
     this.addImage();
   }
 
-  render (): void {
+  render(): void {
     this.el.append(this.cardContainer);
     this.cardContainer.append(this.cardFront, this.cardBack);
     this.cardFront.append(this.cardFrontImg);
