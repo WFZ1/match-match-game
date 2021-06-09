@@ -4,6 +4,7 @@ import PageAbout from './components/page-about/page-about';
 import game from './components/game/game';
 import createElement from './shared/create-element';
 import PageBestScore from './components/page-best-score/page-best-score';
+import PageSettings from './components/page-settings/page-settings';
 
 export default class App {
   private readonly header;
@@ -14,6 +15,8 @@ export default class App {
 
   private readonly pageBestScore;
 
+  private readonly pageSettings;
+
   constructor(private readonly rootEl: HTMLElement) {
     this.header = header;
     this.main = createElement('main', ['main']);
@@ -22,6 +25,7 @@ export default class App {
 
     this.pageAbout = new PageAbout(this.main);
     this.pageBestScore = new PageBestScore(this.main);
+    this.pageSettings = new PageSettings(this.main);
   }
 
   render(): void {
@@ -63,7 +67,8 @@ export default class App {
         );
       })
       .add('settings', () => {
-        this.main.innerText = 'Welcome in game settings page!';
+        this.clearMainArea();
+        this.pageSettings.render();
         this.header.nav.navItems[2].el.classList.add('nav-item_active');
       });
   }
