@@ -6,6 +6,7 @@ import GameParameter from '../game-parameter/game-parameter';
 const GAME_PARAMS = [
   {
     title: 'Game cards',
+    id: 'list-game-cards-type',
     options: [
       {
         value: 'select game cards type',
@@ -17,15 +18,15 @@ const GAME_PARAMS = [
       },
       {
         value: 'Fruits',
-
       },
       {
         value: 'Vegetables',
-      }
+      },
     ],
   },
   {
     title: 'Difficulty',
+    id: 'list-game-difficulty',
     options: [
       {
         value: 'select game type',
@@ -40,12 +41,12 @@ const GAME_PARAMS = [
       },
       {
         value: '8x8',
-      }
+      },
     ],
   },
 ];
 
-export default class GameSettingsField extends BaseComponent {
+class GameSettingsField extends BaseComponent {
   readonly gameParams: GameParameter[] = [];
 
   constructor() {
@@ -57,9 +58,17 @@ export default class GameSettingsField extends BaseComponent {
     GAME_PARAMS.forEach((param) => this.addParameter(param));
   }
 
-  addParameter({ title, options }: IGameParams): void {
-    const gameParameter = new GameParameter(['game-settings-field__parameter'], title, options);
+  addParameter({ title, id, options }: IGameParams): void {
+    const gameParameter = new GameParameter(
+      ['game-settings-field__parameter'],
+      title,
+      id,
+      options,
+    );
     this.gameParams.push(gameParameter);
     this.el.append(gameParameter.el);
   }
 }
+
+const gameSettingsField = new GameSettingsField();
+export default gameSettingsField;

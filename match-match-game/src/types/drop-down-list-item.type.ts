@@ -1,5 +1,6 @@
 export default interface IDropDownListItem {
-  disabled?: boolean,
-  value: string,
-  selected?: boolean,
+  disabled?: boolean;
+  value: string;
+  selected?: boolean;
+  id?: string;
 }

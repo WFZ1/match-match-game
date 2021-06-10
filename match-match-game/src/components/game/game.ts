@@ -1,15 +1,18 @@
 import './game.scss';
 import BaseComponent from '../base/base-component';
+import gameSettingsField from '../game-settings-field/game-settings-field';
 import CardsField from '../cards-field/cards-field';
 import Card from '../card/card';
-import delay from '../../shared/delay';
-import IImageCategory from '../../types/image-category.type';
-import getData from '../../shared/get-data';
-import getContainEl from '../../shared/get-contain-el';
 import GameTime from '../game-time/game-time';
-import PopupGameSuccess from '../popup-game-success/popup-game-success';
 import db from '../base/database';
+import delay from '../../shared/delay';
 import router from '../base/router';
+import PopupGameSuccess from '../popup-game-success/popup-game-success';
+import getData from '../../shared/get-data';
+import IImageCategory from '../../types/image-category.type';
+import getContainEl from '../../shared/get-contain-el';
+import fromHyphenToCamelCase from '../../shared/from-hyphen-to-camelcase';
+import IGameSettings from '../../types/game-settings.type';
 
 const FLIP_DELAY = 1000;
 const CARD_WRONG_CLASS = 'card_wrong';
@@ -65,17 +68,37 @@ class Game extends BaseComponent {
     });
   }
 
+  private static configureSettings(
+    categories: IImageCategory[],
+  ): IGameSettings {
+    const gameParams: { [key: string]: string } = {};
+
+    gameSettingsField.gameParams.forEach((param) => {
+      const prop = fromHyphenToCamelCase(param.id);
+      gameParams[prop] = (param.field.el as HTMLSelectElement).value;
+    });
+
+    const cardsType =
+      categories.find(
+        (imagesType) => imagesType.category === gameParams.listGameCardsType,
+      ) || categories[0];
+    const difficulty = +gameParams.listGameDifficulty.split('x')[0];
+
+    return { cardsType, difficulty };
+  }
+
   async start(): Promise<void> {
     this.gameTime.reset();
 
     const categories: IImageCategory[] = await getData('./images.json');
 
-    // Choose category images. For this moment it is 'Animals'
+    const { cardsType, difficulty } = Game.configureSettings(categories);
 
-    const cat = categories[0];
-    const images = cat.images.map(
-      (name) => `assets/images/${cat.category}/${name}`,
-    );
+    const images = cardsType.images
+      .map((name) => `assets/images/${cardsType.category}/${name}`)
+      .sort(() => Math.random() - 0.5);
+
+    images.splice(difficulty, 100);
 
     this.cardsField.clear();
 
@@ -144,7 +167,8 @@ class Game extends BaseComponent {
     this.activeCard = undefined;
     this.isAnimation = false;
 
-    if (this.countMatchesCards === this.cardsField.fieldSize) this.finishGame();
+    if (this.countMatchesCards === this.cardsField.cards.length)
+      this.finishGame();
   }
 
   private finishGame(): void {

@@ -5,3 +5,11 @@
   background-color: #fff;
   box-shadow: 0 6px 5px rgba(0, 0, 0, 0.24), 0 9px 18px rgba(0, 0, 0, 0.18);
 }
+
+.game-settings-field__parameter {
+  margin-bottom: 37px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}

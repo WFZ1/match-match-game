@@ -1,15 +1,11 @@
 import './page-settings.scss';
-import GameSettingsField from '../game-settings-field/game-settings-field';
+import gameSettingsField from '../game-settings-field/game-settings-field';
 
 export default class PageSettings {
-  private readonly gameSettingsField: GameSettingsField;
-
-  constructor(private readonly rootEl: HTMLElement) {
-    this.gameSettingsField = new GameSettingsField();
-  }
+  constructor(private readonly rootEl: HTMLElement) {}
 
   render(): void {
     document.body.classList.add('page-settings');
-    this.rootEl.append(this.gameSettingsField.el);
+    this.rootEl.append(gameSettingsField.el);
   }
 }

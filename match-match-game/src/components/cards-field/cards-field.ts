@@ -7,8 +7,6 @@ export default class CardsField extends BaseComponent {
 
   readonly showTime = 3000; // time before cards flip back
 
-  fieldSize = 16;
-
   constructor() {
     super('div', ['cards-field']);
   }

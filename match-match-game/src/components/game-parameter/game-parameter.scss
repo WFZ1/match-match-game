@@ -1,11 +1,8 @@
 .game-parameter {
   width: max-content;
   min-width: 256px;
-  margin-bottom: 37px;
   padding: 0 23px 6px 16px;
-  border-bottom: 1px solid #E5E5E5;
-
-  &:last-of-type { margin-bottom: 0; }
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .game-parameter__title {
@@ -16,8 +13,5 @@
   line-height: 30px;
   letter-spacing: 0.15px;
   color: rgba(0, 0, 0, 0.87);
-}
-
-.game-parameter__list {
-
+  cursor: pointer;
 }

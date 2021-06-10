@@ -1,6 +1,7 @@
 import IDropDownListItem from './drop-down-list-item.type';
 
 export default interface IGameParams {
-  title: string,
-  options: IDropDownListItem[]
-};
+  title: string;
+  id: string;
+  options: IDropDownListItem[];
+}
