@@ -1,13 +1,16 @@
 import router from './components/base/router';
 import header from './components/header/header';
+import RegisterPopup from './components/register-popup/register-popup';
 import PageAbout from './components/page-about/page-about';
-import game from './components/game/game';
-import createElement from './shared/create-element';
 import PageBestScore from './components/page-best-score/page-best-score';
 import PageSettings from './components/page-settings/page-settings';
+import game from './components/game/game';
+import createElement from './shared/create-element';
 
 export default class App {
   private readonly header;
+
+  private readonly registerPopup: RegisterPopup;
 
   readonly main;
 
@@ -19,6 +22,7 @@ export default class App {
 
   constructor(private readonly rootEl: HTMLElement) {
     this.header = header;
+    this.registerPopup = new RegisterPopup('Register new Player');
     this.main = createElement('main', ['main']);
 
     this.render();
@@ -29,7 +33,8 @@ export default class App {
   }
 
   render(): void {
-    this.rootEl.append(this.header.el, this.main);
+    this.registerPopup.render();
+    this.rootEl.append(this.header.el, this.main, this.registerPopup.el);
   }
 
   clearMainArea(): void {

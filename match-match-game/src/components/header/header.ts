@@ -14,7 +14,7 @@ export class Header extends BaseComponent {
 
   readonly nav;
 
-  private readonly registerBtn;
+  readonly registerBtn;
 
   readonly userAvatar;
 

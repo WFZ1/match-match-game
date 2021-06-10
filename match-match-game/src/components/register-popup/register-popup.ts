@@ -2,6 +2,7 @@ import './register-popup.scss';
 import Popup from '../base/popup/popup';
 import RegisterForm from '../register-form/register-form';
 import createElement from '../../shared/create-element';
+import header from '../header/header';
 
 const FIELDS = [
   {
@@ -26,13 +27,10 @@ export default class RegisterPopup extends Popup {
 
   private readonly title: HTMLHeadingElement;
 
-  private readonly btn: HTMLButtonElement | null;
-
-  constructor(title: string, btnSelector: string) {
+  constructor(title: string) {
     super(['register-popup'], 'register-popup__container');
     this.form = new RegisterForm(['register-popup__form'], this);
     this.title = RegisterPopup.addTitle(title);
-    this.btn = document.querySelector(btnSelector);
   }
 
   static addTitle(text: string): HTMLHeadingElement {
@@ -44,7 +42,7 @@ export default class RegisterPopup extends Popup {
   }
 
   protected attachListeners(): void {
-    this.btn?.addEventListener('click', () => this.showPopup());
+    header.registerBtn.el.addEventListener('click', () => this.showPopup());
     this.el.addEventListener('click', (e) => this.checkClickIsOutside(e));
   }
 
