@@ -5,7 +5,7 @@ import Card from '../card/card';
 export default class CardsField extends BaseComponent {
   cards: Card[] = [];
 
-  readonly showTime = 3000; // time before cards flip back
+  readonly showTime = 30000; // time before cards flip back
 
   constructor() {
     super('div', ['cards-field']);
