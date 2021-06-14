@@ -4,8 +4,6 @@ import IPlayer from '../../types/player.type';
 import createElement from '../../shared/create-element';
 import Score from '../score/score';
 
-const IMG_SRC = './assets/images/player/avatar.png';
-
 export default class BestPlayer extends BaseComponent {
   private readonly image: HTMLImageElement;
 
@@ -26,7 +24,7 @@ export default class BestPlayer extends BaseComponent {
   }
 
   render(player: IPlayer): void {
-    this.image.src = IMG_SRC;
+    this.image.src = player.avatar;
     this.fullName.textContent = player.fullName;
     this.email.textContent = player.email;
 

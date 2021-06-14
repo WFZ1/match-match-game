@@ -11,10 +11,30 @@
   grid-column: 1 / 2;
 }
 
-.register-form__img {
+.register-form__avatar {
+  position: relative;
   grid-column: 2 / 4;
   grid-row: 1 / 4;
+  width: 198px;
+  height: 198px;
   margin-left: 22px;
+}
+
+.register-form__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.register-form__upload-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .register-form__btn {

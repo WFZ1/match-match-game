@@ -9,6 +9,7 @@ import header from '../header/header';
 import db from '../base/database';
 import createElement from '../../shared/create-element';
 import IField from '../../types/field.type';
+import playerAvatar from '../player-avatar/player-avatar';
 
 const FIELD_VALID_CLASS = 'field__valid';
 const BTN_CLASS = 'register-form__btn';
@@ -20,22 +21,52 @@ export default class RegisterForm extends BaseComponent {
 
   private readonly btns: Btn[] = [];
 
-  private avatar: HTMLImageElement;
+  private avatar: HTMLElement;
+
+  private image: HTMLImageElement;
+
+  private imgUploader: HTMLInputElement;
 
   constructor(classes: string[], private popup: RegisterPopup) {
     super('form', ['register-form', ...classes]);
-    this.avatar = createElement('img', ['register-form__img']) as HTMLImageElement;
-    this.render(AVATAR_SRC);
+
+    this.avatar = createElement('div', ['register-form__avatar']);
+    this.image = createElement('img', ['register-form__img']) as HTMLImageElement;
+    this.imgUploader = createElement('input', ['register-form__upload-img']) as HTMLInputElement;
+
+    this.render();
+    this.attachListeners();
   }
 
-  private render(avatar: string): void {
+  private render(): void {
     this.el.setAttribute('novalidate', '');
-    this.avatar.src = avatar;
+    this.image.setAttribute('src', AVATAR_SRC);
+
+    this.imgUploader.setAttribute('type', 'file');
+    this.imgUploader.setAttribute('name', 'upload');
+
+    this.avatar.append(this.image, this.imgUploader);
     this.el.append(this.avatar);
   }
 
-  changeAvatar(avatar: string): void {
-    this.avatar.src = avatar;
+  private attachListeners(): void {
+    this.imgUploader.addEventListener('change', () => this.changeAvatar());
+  }
+
+  private changeAvatar(): void {
+    const file = (this.imgUploader as { files: FileList }).files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.result) {
+          this.image.setAttribute('src', reader.result.toString());
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
   }
 
   addField(fieldProps: IField): void {
@@ -85,6 +116,7 @@ export default class RegisterForm extends BaseComponent {
     const player = {
       fullName: `${data['first-name']} ${data['last-name']}`,
       email: data.email,
+      avatar: this.image.src,
     };
 
     db.addData('players', player);
@@ -92,6 +124,6 @@ export default class RegisterForm extends BaseComponent {
     this.popup.hidePopup();
 
     header.renderPlayerPart();
-    header.playerAvatar.setPhoto(AVATAR_SRC);
+    playerAvatar.setImage(this.image.src);
   }
 }
