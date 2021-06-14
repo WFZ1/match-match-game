@@ -33,7 +33,6 @@ export default class App {
   }
 
   render(): void {
-    this.registerPopup.render();
     this.rootEl.append(this.header.el, this.main, this.registerPopup.el);
   }
 

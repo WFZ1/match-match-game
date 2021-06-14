@@ -1,9 +1,9 @@
-import './user-avatar.scss';
+import './player-avatar.scss';
 import BaseComponent from '../base/base-component';
 
-export default class UserAvatar extends BaseComponent {
+export default class PlayerAvatar extends BaseComponent {
   constructor(classes: string[]) {
-    super('img', ['user-avatar', ...classes]);
+    super('img', ['player-avatar', ...classes]);
   }
 
   setPhoto(image: string): void {

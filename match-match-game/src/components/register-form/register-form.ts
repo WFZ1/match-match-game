@@ -1,13 +1,14 @@
 import './register-form.scss';
 import BaseComponent from '../base/base-component';
-import BtnAddUser from '../btn-add-user/btn-add-user';
-import BtnCancel from '../btn-cancel/btn-cancel';
-import Btn from '../base/btn/btn';
-import Field from '../field/field';
-import db from '../base/database';
 import type RegisterPopup from '../register-popup/register-popup';
+import Field from '../field/field';
+import type Btn from '../base/btn/btn';
+import BtnAddPlayer from '../btn-add-player/btn-add-player';
+import BtnCancel from '../btn-cancel/btn-cancel';
 import header from '../header/header';
+import db from '../base/database';
 import createElement from '../../shared/create-element';
+import IField from '../../types/field.type';
 
 const FIELD_VALID_CLASS = 'field__valid';
 const BTN_CLASS = 'register-form__btn';
@@ -23,20 +24,33 @@ export default class RegisterForm extends BaseComponent {
 
   constructor(classes: string[], private popup: RegisterPopup) {
     super('form', ['register-form', ...classes]);
-    this.avatar = RegisterForm.addAvatar(AVATAR_SRC);
+    this.avatar = createElement('img', ['register-form__img']) as HTMLImageElement;
+    this.render(AVATAR_SRC);
   }
 
-  addField(label: string, type: string, name: string): void {
-    const field = new Field(label, type, name, ['register-form__field']);
-    field.render();
+  private render(avatar: string): void {
+    this.el.setAttribute('novalidate', '');
+    this.avatar.src = avatar;
+    this.el.append(this.avatar);
+  }
+
+  changeAvatar(avatar: string): void {
+    this.avatar.src = avatar;
+  }
+
+  addField(fieldProps: IField): void {
+    fieldProps.classes = ['register-form__field'];
+    const field = new Field(fieldProps);
+
     this.fields.push(field);
+    this.el.append(field.el);
   }
 
   addButton(type: string, text: string): void {
     let btn;
 
     if (type === 'submit') {
-      btn = new BtnAddUser([BTN_CLASS, 'register-form__add-user'], text);
+      btn = new BtnAddPlayer([BTN_CLASS, 'register-form__add-player'], text);
       btn.attachHandler((e) => this.addPlayer.call(this, e));
     } else {
       btn = new BtnCancel([BTN_CLASS, 'register-form__cancel'], text);
@@ -44,18 +58,7 @@ export default class RegisterForm extends BaseComponent {
     }
 
     this.btns.push(btn);
-  }
-
-  static addAvatar(image: string): HTMLImageElement {
-    const avatar = createElement('img', [
-      'register-form__img',
-    ]) as HTMLImageElement;
-    avatar.src = image;
-    return avatar;
-  }
-
-  changeAvatar(image: string): void {
-    this.avatar.src = image;
+    this.el.append(btn.el);
   }
 
   clearFields(): void {
@@ -65,11 +68,7 @@ export default class RegisterForm extends BaseComponent {
   }
 
   checkValidation(): boolean {
-    for (let i = 0; i < this.fields.length; i++) {
-      if (!this.fields[i].el.matches(`.${FIELD_VALID_CLASS}`)) return false;
-    }
-
-    return true;
+    return this.fields.every((field) => field.el.matches(`.${FIELD_VALID_CLASS}`));
   }
 
   addPlayer(e: Event): void {
@@ -79,11 +78,8 @@ export default class RegisterForm extends BaseComponent {
     if (!isValid) return;
 
     const data: { [key: string]: string } = {};
-
     this.fields.forEach((field) => {
-      const input: HTMLInputElement | null =
-        field.el.querySelector('.field__input');
-      if (input) data[input.name] = input.value;
+      data[field.input.name] = field.input.value
     });
 
     const player = {
@@ -95,13 +91,7 @@ export default class RegisterForm extends BaseComponent {
 
     this.popup.hidePopup();
 
-    header.renderUserPart();
-    header.userAvatar.setPhoto(AVATAR_SRC);
-  }
-
-  render(): void {
-    this.fields.forEach((field) => this.el.append(field.el));
-    this.el.append(this.avatar);
-    this.btns.forEach((btn) => this.el.append(btn.el));
+    header.renderPlayerPart();
+    header.playerAvatar.setPhoto(AVATAR_SRC);
   }
 }

@@ -3,7 +3,7 @@ import BaseComponent from '../base/base-component';
 import Logo from '../logo/logo';
 import Nav from '../nav/nav';
 import RegisterBtn from '../register-btn/register-btn';
-import UserAvatar from '../user-avatar/user-avatar';
+import PlayerAvatar from '../player-avatar/player-avatar';
 import btnToggleGame from '../btn-toggle-game/btn-toggle-game';
 import createElement from '../../shared/create-element';
 
@@ -16,7 +16,7 @@ export class Header extends BaseComponent {
 
   readonly registerBtn;
 
-  readonly userAvatar;
+  readonly playerAvatar;
 
   constructor() {
     super('header', ['header']);
@@ -31,13 +31,13 @@ export class Header extends BaseComponent {
 
     // They will render after register new player
 
-    this.userAvatar = new UserAvatar(['header__user-avatar']);
+    this.playerAvatar = new PlayerAvatar(['header__player-avatar']);
   }
 
-  renderUserPart(): void {
+  renderPlayerPart(): void {
     this.registerBtn.el.remove();
     btnToggleGame.addClasses(['header__btn-start-game']);
-    this.container.append(btnToggleGame.el, this.userAvatar.el);
+    this.container.append(btnToggleGame.el, this.playerAvatar.el);
   }
 
   render(): void {

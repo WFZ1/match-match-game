@@ -1,28 +1,47 @@
 import './field.scss';
 import BaseComponent from '../base/base-component';
 import createElement from '../../shared/create-element';
-
-const VALIDATION = {
-  onlyNumbs: /^\d+$/,
-  onlyServiceSymbols: /[~!@#$%*()_—+=|:;"'`<>,.?/^]/,
-
-  // https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
-  email:
-    /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[x01-x08x0bx0cx0e-x1fx21x23-x5bx5d-x7f]|\\[x01-x09x0bx0cx0e-x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[x01-x08x0bx0cx0e-x1fx21-x5ax53-x7f]|\\[x01-x09x0bx0cx0e-x7f])+)\])/,
-};
+import IField from '../../types/field.type';
 
 export default class Field extends BaseComponent {
-  private readonly label: string;
+  private readonly container: HTMLElement;
 
-  private readonly type: string;
+  private readonly title: HTMLElement;
 
-  private readonly name: string;
+  readonly input: HTMLInputElement;
 
-  constructor(label: string, type: string, name: string, classes: string[]) {
-    super('div', ['field', ...classes]);
-    this.label = label;
-    this.type = type;
-    this.name = name;
+  private readonly checker: HTMLElement;
+
+  private readonly error: HTMLElement;
+
+  constructor(fieldProps: IField) {
+    super('div', ['field', ...(fieldProps.classes as []) ]);
+
+    this.container = createElement('label', ['field__container']);
+    this.title = createElement('span', ['field__title']);
+    this.input = createElement('input', ['field__input']) as HTMLInputElement;
+    this.checker = createElement('div', ['field__checker']);
+    this.error = createElement('p', ['field__error', 'field__error_hidden']);
+
+    this.render(fieldProps);
+    this.attachListeners();
+  }
+
+  private render({ title, type, name, pattern, error }: IField): void {
+    this.title.textContent = title;
+    this.error.textContent = error;
+
+    this.input.setAttribute('type', type);
+    this.input.setAttribute('name', name);
+    this.input.setAttribute('maxlength', '30');
+    this.input.setAttribute('required', 'required');
+
+    const regexStr = pattern.toString();
+    const patternStr = regexStr.substring(1, regexStr.length - 1);
+    this.input.setAttribute('pattern', patternStr);
+
+    this.el.append(this.container, this.error);
+    this.container.append(this.title, this.input, this.checker);
   }
 
   attachListeners(): void {
@@ -30,49 +49,14 @@ export default class Field extends BaseComponent {
   }
 
   validateField(): void {
-    const input: HTMLInputElement | null =
-      this.el.querySelector('.field__input');
-    const val = input?.value;
-
-    if (!val) {
-      this.el.classList.remove('field__valid');
-      return;
-    }
-
-    if (
-      this.type === 'text' &&
-      !VALIDATION.onlyNumbs.test(val) &&
-      !VALIDATION.onlyServiceSymbols.test(val)
-    ) {
+    if (this.input.validity.valid) {
+      this.el.classList.remove('field__invalid');
       this.el.classList.add('field__valid');
-    } else if (this.type === 'email' && VALIDATION.email.test(val)) {
-      this.el.classList.add('field__valid');
+      this.error.classList.add('field__error_hidden');
     } else {
       this.el.classList.remove('field__valid');
+      this.el.classList.add('field__invalid');
+      this.error.classList.remove('field__error_hidden');
     }
-  }
-
-  private createLabel() {
-    const label = createElement('label', ['field__label']) as HTMLLabelElement;
-    label.innerText = this.label;
-    return label;
-  }
-
-  private createInput() {
-    const input = createElement('input', ['field__input']) as HTMLInputElement;
-    input.setAttribute('type', this.type);
-    input.setAttribute('name', this.name);
-    input.setAttribute('maxlength', '30');
-    input.setAttribute('required', 'required');
-    return input;
-  }
-
-  render(): void {
-    const label = this.createLabel();
-    const input = this.createInput();
-    const checker = createElement('div', ['field__checker']) as HTMLElement;
-    this.attachListeners();
-
-    this.el.append(label, input, checker);
   }
 }

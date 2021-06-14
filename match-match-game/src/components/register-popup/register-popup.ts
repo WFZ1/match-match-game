@@ -6,39 +6,40 @@ import header from '../header/header';
 
 const FIELDS = [
   {
-    label: 'First Name',
+    title: 'First Name',
     type: 'text',
     name: 'first-name',
+    pattern: /(?=\d*\D+)^[^~!@#$%*()_—+=|:;"'`<>,.?/^]+$/,
+    error: 'First name can\'t be empty, contain only numbers, contain service characters (~ ! @ # $ % * () _ — + = | : ; " \' ` < > , . ? / ^).',
   },
   {
-    label: 'Last Name',
+    title: 'Last Name',
     type: 'text',
     name: 'last-name',
+    pattern: /(?=\d*\D+)^[^~!@#$%*()_—+=|:;"'`<>,.?/^]+$/,
+    error: 'Last name can\'t be empty, contain only numbers, contain service characters (~ ! @ # $ % * () _ — + = | : ; " \' ` < > , . ? / ^).',
   },
   {
-    label: 'E-mail',
+    title: 'E-mail',
     type: 'email',
     name: 'email',
+
+    // https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
+    pattern: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[x01-x08x0bx0cx0e-x1fx21x23-x5bx5d-x7f]|\\[x01-x09x0bx0cx0e-x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[x01-x08x0bx0cx0e-x1fx21-x5ax53-x7f]|\\[x01-x09x0bx0cx0e-x7f])+)\])/,
+    error: 'Email can\'t be empty, must comply with the standard email generation rule [RFC](https://en.wikipedia.org/wiki/Email_address#Standards_documents)',
   },
 ];
 
 export default class RegisterPopup extends Popup {
   private readonly form: RegisterForm;
 
-  private readonly title: HTMLHeadingElement;
+  private readonly title: HTMLElement;
 
   constructor(title: string) {
     super(['register-popup'], 'register-popup__container');
     this.form = new RegisterForm(['register-popup__form'], this);
-    this.title = RegisterPopup.addTitle(title);
-  }
-
-  static addTitle(text: string): HTMLHeadingElement {
-    const title = createElement('h3', [
-      'register-popup__title',
-    ]) as HTMLHeadingElement;
-    title.textContent = text;
-    return title;
+    this.title = createElement('h3', ['register-popup__title']);
+    this.render(title)
   }
 
   protected attachListeners(): void {
@@ -46,15 +47,13 @@ export default class RegisterPopup extends Popup {
     this.el.addEventListener('click', (e) => this.checkClickIsOutside(e));
   }
 
-  render(): void {
-    FIELDS.forEach((field) =>
-      this.form.addField(field.label, field.type, field.name),
-    );
+  private render(title: string): void {
+    this.title.textContent = title;
+
+    FIELDS.forEach((field) => this.form.addField(field));
 
     this.form.addButton('submit', 'add user');
     this.form.addButton('reset', 'cancel');
-
-    this.form.render();
 
     this.el.append(this.container);
     this.container.append(this.title, this.form.el);
