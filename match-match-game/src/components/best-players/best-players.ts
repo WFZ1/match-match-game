@@ -6,7 +6,7 @@ import createElement from '../../shared/create-element';
 import { NUMBER_TOP_PLAYERS } from './constants';
 
 export default class BestPlayers extends BaseComponent {
-  private readonly bestPlayers: BestPlayer[] = [];
+  private bestPlayers: BestPlayer[] = [];
 
   private readonly containerEl: HTMLElement;
 
@@ -26,8 +26,13 @@ export default class BestPlayers extends BaseComponent {
     this.el.append(this.titleEl, this.containerEl);
   }
 
-  addBestPlayers(players: IPlayer[]): void {
+  private clear(): void {
+    this.bestPlayers = [];
     this.containerEl.innerHTML = '';
+  }
+
+  addBestPlayers(players: IPlayer[]): void {
+    this.clear();
 
     for (let i = 0; i < NUMBER_TOP_PLAYERS && players[i]; i++) {
       const player = new BestPlayer(['best-players__player'], players[i]);

@@ -78,7 +78,7 @@ class Database {
   }
 
   private updateBestPlayersArr(data: IPlayer[] | IDBDatabase): void {
-    this.bestPlayers = Database.sortBestPlayers(data as IPlayer[]);
+    this.bestPlayers = Database.sortBestPlayers(data);
   }
 
   private getAllData(
@@ -96,8 +96,22 @@ class Database {
     return arr[arr.length - 1];
   }
 
-  private static sortBestPlayers(data: IPlayer[]): IPlayer[] {
-    return data.sort((a, b) => (b.score || 0) - (a.score || 0));
+  private static sortBestPlayers(data: IPlayer[] | IDBDatabase): IPlayer[] {
+    return (data as IPlayer[]).sort((a, b) => (b.score || 0) - (a.score || 0));
+  }
+
+  getAccessToDataStore(
+    store: string,
+    func: (data: IPlayer[] | IDBDatabase) => void,
+  ): void {
+    const objStore = this.getStore(store);
+    if (!objStore) return;
+
+    objStore.getAll().onsuccess = (e: Event) => {
+      const data = (e.target as IDBOpenDBRequest).result;
+      const sortedData = Database.sortBestPlayers(data);
+      func(sortedData);
+    };
   }
 
   private static handleRequestResult(req: IDBRequest): void {

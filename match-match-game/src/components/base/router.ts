@@ -88,5 +88,5 @@ class Router {
   }
 }
 
-const router = new Router({});
+const router = new Router({ mode: 'hash' });
 export default router;
