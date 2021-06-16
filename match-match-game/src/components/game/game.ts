@@ -4,7 +4,7 @@ import gameSettingsField from '../game-settings-field/game-settings-field';
 import CardsField from '../cards-field/cards-field';
 import Card from '../card/card';
 import GameTime from '../game-time/game-time';
-import db from '../base/database';
+import db from '../base/database/database';
 import delay from '../../shared/delay';
 import router from '../base/router';
 import PopupGameSuccess from '../popup-game-success/popup-game-success';
@@ -13,15 +13,12 @@ import IImageCategory from '../../types/image-category.type';
 import getContainEl from '../../shared/get-contain-el';
 import fromHyphenToCamelCase from '../../shared/from-hyphen-to-camelcase';
 import IGameSettings from '../../types/game-settings.type';
-
-const FLIP_DELAY = 1000;
-const CARD_WRONG_CLASS = 'card_wrong';
-const CARD_CORRECT_CLASS = 'card_approved';
+import { FLIP_DELAY, CARD_CORRECT_CLASS, CARD_WRONG_CLASS } from './constants';
 
 class Game extends BaseComponent {
-  private readonly gameTime: GameTime;
-
   private readonly cardsField: CardsField;
+
+  private readonly gameTime: GameTime;
 
   private readonly popupGameSuccess: PopupGameSuccess;
 
@@ -29,7 +26,7 @@ class Game extends BaseComponent {
 
   private isAnimation = false;
 
-  private countMatchesCards = 0;
+  private numbMatchesCards = 0;
 
   private numbCompare = 0;
 
@@ -37,6 +34,7 @@ class Game extends BaseComponent {
 
   constructor() {
     super('div', ['game']);
+
     this.cardsField = new CardsField();
     this.gameTime = new GameTime(['game__game-time']);
     this.popupGameSuccess = new PopupGameSuccess();
@@ -45,7 +43,7 @@ class Game extends BaseComponent {
     this.attachListener();
   }
 
-  render(): void {
+  private render(): void {
     this.el.append(
       this.gameTime.el,
       this.cardsField.el,
@@ -53,7 +51,7 @@ class Game extends BaseComponent {
     );
   }
 
-  attachListener(): void {
+  private attachListener(): void {
     this.cardsField.el.addEventListener('click', (e) =>
       this.handleCardsField(e),
     );
@@ -62,8 +60,10 @@ class Game extends BaseComponent {
   attachHandlerGameCompleting(func: () => void): void {
     this.popupGameSuccess.attachHandler((e: Event) => {
       e.preventDefault();
+
       router.navigate('score');
       this.popupGameSuccess.hidePopup();
+
       func();
     });
   }
@@ -74,7 +74,8 @@ class Game extends BaseComponent {
     const gameParams: { [key: string]: string } = {};
 
     gameSettingsField.gameParams.forEach((param) => {
-      const prop = fromHyphenToCamelCase(param.id);
+      const prop = fromHyphenToCamelCase(param.field.el.id);
+
       gameParams[prop] = (param.field.el as HTMLSelectElement).value;
     });
 
@@ -116,17 +117,31 @@ class Game extends BaseComponent {
   stop(): void {
     this.gameTime.stop();
 
-    this.countMatchesCards = 0;
+    this.numbMatchesCards = 0;
     this.numbCompare = 0;
     this.numbErrCompare = 0;
   }
 
-  handleCardsField(e: MouseEvent): void {
+  private handleCardsField(e: MouseEvent): void {
     const el = getContainEl(e.target as HTMLElement, '.card', this.el);
 
     if (el) {
       const pointer = this.cardsField.cards.find((card) => card.el === el);
       if (pointer) this.handleCard(pointer);
+    }
+  }
+
+  private changeCardsCoupleState(
+    type: string,
+    className: string,
+    card: Card,
+  ): void {
+    if (type === 'add') {
+      this.activeCard?.el.classList.add(className);
+      card.el.classList.add(className);
+    } else {
+      this.activeCard?.el.classList.remove(className);
+      card.el.classList.remove(className);
     }
   }
 
@@ -148,26 +163,23 @@ class Game extends BaseComponent {
     if (this.activeCard.imageSrc !== card.imageSrc) {
       this.numbErrCompare++;
 
-      this.activeCard.el.classList.add(CARD_WRONG_CLASS);
-      card.el.classList.add(CARD_WRONG_CLASS);
+      this.changeCardsCoupleState('add', CARD_WRONG_CLASS, card);
 
       await delay(FLIP_DELAY);
 
       this.activeCard.flipToBack();
       card.flipToBack();
 
-      this.activeCard.el.classList.remove(CARD_WRONG_CLASS);
-      card.el.classList.remove(CARD_WRONG_CLASS);
+      this.changeCardsCoupleState('remove', CARD_WRONG_CLASS, card);
     } else {
-      this.activeCard.el.classList.add(CARD_CORRECT_CLASS);
-      card.el.classList.add(CARD_CORRECT_CLASS);
-      this.countMatchesCards += 2;
+      this.changeCardsCoupleState('add', CARD_CORRECT_CLASS, card);
+      this.numbMatchesCards += 2;
     }
 
     this.activeCard = undefined;
     this.isAnimation = false;
 
-    if (this.countMatchesCards === this.cardsField.cards.length)
+    if (this.numbMatchesCards === this.cardsField.cards.length)
       this.finishGame();
   }
 
@@ -184,10 +196,11 @@ class Game extends BaseComponent {
     const score = this.calculateScore(time);
     player.score = score;
     delete player.id;
+
     db.addData('best-players', player);
   }
 
-  calculateScore(time: { [key: string]: number }): number {
+  private calculateScore(time: { [key: string]: number }): number {
     const totalSec = time.min * 60 + time.sec;
     return (this.numbCompare - this.numbErrCompare) * 100 - totalSec * 10;
   }

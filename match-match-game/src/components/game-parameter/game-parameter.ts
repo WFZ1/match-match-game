@@ -1,33 +1,27 @@
 import './game-parameter.scss';
 import BaseComponent from '../base/base-component';
-import createElement from '../../shared/create-element';
 import DropDownList from '../base/drop-down-list/drop-down-list';
-import IDropDownListItem from '../../types/drop-down-list-item.type';
+import createElement from '../../shared/create-element';
+import IGameParams from '../../types/game-params.type';
 
 export default class GameParameter extends BaseComponent {
-  readonly title;
+  readonly titleEl: HTMLElement;
 
-  readonly field;
+  readonly field: DropDownList;
 
-  readonly id;
+  constructor({ classes, title, id, options }: IGameParams) {
+    super('div', ['game-parameter', ...(classes as [])]);
 
-  constructor(
-    classes: string[],
-    title: string,
-    id: string,
-    listParams: IDropDownListItem[],
-  ) {
-    super('div', ['game-parameter', ...classes]);
-    this.title = createElement('label', ['game-parameter__title']);
-    this.field = new DropDownList(['game-parameter__list'], id, listParams);
-    this.id = id;
+    this.titleEl = createElement('label', ['game-parameter__title']);
+    this.field = new DropDownList(['game-parameter__list'], id, options);
 
     this.render(title, id);
   }
 
-  render(title: string, id: string): void {
-    this.title.textContent = title;
-    this.title.setAttribute('for', id);
-    this.el.append(this.title, this.field.el);
+  private render(title: string, id: string): void {
+    this.titleEl.textContent = title;
+    this.titleEl.setAttribute('for', id);
+
+    this.el.append(this.titleEl, this.field.el);
   }
 }

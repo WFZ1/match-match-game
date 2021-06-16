@@ -14,9 +14,9 @@
 }
 
 .best-player__img {
+  grid-area: photo;
   width: 40px;
   height: 40px;
-  grid-area: photo;
   object-fit: cover;
   border-radius: 50%;
 }

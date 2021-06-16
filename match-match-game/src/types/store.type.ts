@@ -1,7 +1,7 @@
 export default interface IStore {
   name: string;
-  options: {
-    key: string;
+  opts: {
+    keyPath: string;
     autoIncrement?: boolean;
   };
 }

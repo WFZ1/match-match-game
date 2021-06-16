@@ -2,44 +2,40 @@ import './card.scss';
 import BaseComponent from '../base/base-component';
 import createElement from '../../shared/create-element';
 import delay from '../../shared/delay';
-
-const FLIP_CLASS = 'card_flipped';
+import { FLIP_CLASS } from './constants';
 
 export default class Card extends BaseComponent {
   isFlipped = false;
 
   readonly flipDuration = 250;
 
-  private readonly cardContainer;
+  private readonly cardContainerEl;
 
-  private readonly cardFront;
+  private readonly cardFrontEl;
 
-  private readonly cardBack;
+  private readonly cardBackEl;
 
-  private readonly cardFrontImg;
+  private readonly cardFrontImgEl;
 
   constructor(readonly imageSrc: string) {
     super('div', ['card']);
 
-    this.cardContainer = createElement('div', ['card__container']);
-    this.cardFront = createElement('div', ['card__front']);
-    this.cardBack = createElement('div', ['card__back']);
-    this.cardFrontImg = createElement('img', [
+    this.cardContainerEl = createElement('div', ['card__container']);
+    this.cardFrontEl = createElement('div', ['card__front']);
+    this.cardBackEl = createElement('div', ['card__back']);
+    this.cardFrontImgEl = createElement('img', [
       'card__front-img',
     ]) as HTMLImageElement;
 
     this.render();
-    this.addImage();
   }
 
-  render(): void {
-    this.el.append(this.cardContainer);
-    this.cardContainer.append(this.cardFront, this.cardBack);
-    this.cardFront.append(this.cardFrontImg);
-  }
+  private render(): void {
+    this.cardFrontImgEl.src = this.imageSrc;
 
-  addImage(): void {
-    this.cardFrontImg.src = this.imageSrc;
+    this.el.append(this.cardContainerEl);
+    this.cardContainerEl.append(this.cardFrontEl, this.cardBackEl);
+    this.cardFrontEl.append(this.cardFrontImgEl);
   }
 
   flipToBack(): Promise<void> {

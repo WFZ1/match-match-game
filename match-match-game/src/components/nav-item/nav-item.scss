@@ -1,13 +1,11 @@
 .nav-item {
   transition: background-color 0.25s linear;
 }
-
-.nav-item_disabled {
-  pointer-events: none;
-}
-
 .nav-item_active {
   background-color: #1e88e5;
+}
+.nav-item_disabled {
+  pointer-events: none;
 }
 
 .nav-item__link {
@@ -24,14 +22,14 @@
 
 .nav-item__img-wrap {
   margin-bottom: 10px;
+}
 
-  &_styled {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 50%;
-  }
+.nav-item__img-wrap_styled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
 }

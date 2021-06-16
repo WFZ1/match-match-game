@@ -4,26 +4,35 @@ import INavItem from '../../types/nav-item.type';
 import createElement from '../../shared/create-element';
 
 export default class NavItem extends BaseComponent {
-  readonly link: HTMLLinkElement;
+  readonly linkEl: HTMLLinkElement;
 
-  constructor(item: INavItem) {
+  private readonly imageWrapperEl: HTMLElement;
+
+  private readonly imageEl: HTMLElement;
+
+  constructor(navItem: INavItem) {
     super('li', ['nav-item']);
 
-    this.link = createElement('a', ['nav-item__link']) as HTMLLinkElement;
-    this.link.innerText = item.text;
-    this.link.href = item.url;
+    this.linkEl = createElement('a', ['nav-item__link']) as HTMLLinkElement;
+    this.imageWrapperEl = createElement('span', ['nav-item__img-wrap']);
+    this.imageEl = createElement('img', ['nav-item__img']);
+
+    this.render(navItem);
+  }
+
+  private render({ url, text, image }: INavItem): void {
+    this.linkEl.textContent = text;
+    this.linkEl.setAttribute('href', url);
 
     // 'icon-star.svg' initially has circled form, other no
-    const spanClasses = ['nav-item__img-wrap'];
-    if (!/icon-star.svg$/.test(item.image))
-      spanClasses.push('nav-item__img-wrap_styled');
+    if (!/icon-star.svg$/.test(image)) {
+      this.imageWrapperEl.classList.add('nav-item__img-wrap_styled');
+    }
 
-    const span = createElement('span', spanClasses) as HTMLSpanElement;
-    const image = createElement('img', ['nav-item__img']) as HTMLImageElement;
-    image.src = item.image;
+    this.imageEl.setAttribute('src', image);
 
-    this.link.prepend(span);
-    span.append(image);
-    this.el.append(this.link);
+    this.el.append(this.linkEl);
+    this.linkEl.prepend(this.imageWrapperEl);
+    this.imageWrapperEl.append(this.imageEl);
   }
 }

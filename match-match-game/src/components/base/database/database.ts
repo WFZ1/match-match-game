@@ -1,23 +1,5 @@
-import IStore from '../../types/store.type';
-import IPlayer from '../../types/player.type';
-
-const DB_NAME = 'WFZ1';
-const DB_STORES: IStore[] = [
-  {
-    name: 'players',
-    options: {
-      key: 'id',
-      autoIncrement: true,
-    },
-  },
-  {
-    name: 'best-players',
-    options: {
-      key: 'id',
-      autoIncrement: true,
-    },
-  },
-];
+import IPlayer from '../../../types/player.type';
+import { DB_NAME, DB_STORES } from './constants';
 
 class Database {
   public db?: IDBDatabase;
@@ -30,7 +12,7 @@ class Database {
     this.OpenInitDB();
   }
 
-  OpenInitDB(): void {
+  private OpenInitDB(): void {
     const req = window.indexedDB.open(DB_NAME, 1);
 
     // Create db and objects of stores
@@ -39,6 +21,8 @@ class Database {
     req.onsuccess = () => {
       // If db is exist, onupgradeneeded won't be in progress, need to do initialization here
       this.db = req.result;
+
+      // Add data to array from object store bd
       this.getData('best-players');
     };
 
@@ -47,17 +31,12 @@ class Database {
     };
   }
 
-  addStores(req: IDBOpenDBRequest): void {
+  private addStores(req: IDBOpenDBRequest): void {
     this.db = req.result;
 
-    DB_STORES.forEach((store) => {
-      const parms = {
-        keyPath: store.options.key,
-        autoIncrement: store.options.autoIncrement,
-      };
-
-      this.db?.createObjectStore(store.name, parms);
-    });
+    DB_STORES.forEach((store) =>
+      this.db?.createObjectStore(store.name, store.opts),
+    );
   }
 
   private getStore(store: string): IDBObjectStore | undefined {
@@ -79,7 +58,7 @@ class Database {
     this.selectArr(objStore, store);
   }
 
-  getData(store: string): void {
+  private getData(store: string): void {
     const objStore = this.getStore(store);
     if (!objStore) return;
 
@@ -117,6 +96,10 @@ class Database {
     return arr[arr.length - 1];
   }
 
+  private static sortBestPlayers(data: IPlayer[]): IPlayer[] {
+    return data.sort((a, b) => (b.score || 0) - (a.score || 0));
+  }
+
   private static handleRequestResult(req: IDBRequest): void {
     req.onsuccess = () => {
       /* console.log('Player added', req.result); */
@@ -124,10 +107,6 @@ class Database {
     req.onerror = () => {
       /* console.log('Error', req.error); */
     };
-  }
-
-  private static sortBestPlayers(data: IPlayer[]): IPlayer[] {
-    return data.sort((a, b) => (b.score || 0) - (a.score || 0));
   }
 }
 

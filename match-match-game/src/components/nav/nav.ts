@@ -1,54 +1,50 @@
 import './nav.scss';
 import BaseComponent from '../base/base-component';
 import NavItem from '../nav-item/nav-item';
-import INavItem from '../../types/nav-item.type';
 import router from '../base/router';
 import createElement from '../../shared/create-element';
+import { NAV_ITEMS } from './constants';
+import { NAV_ITEM_ACTIVE_CLASS } from '../../constants';
 
 export default class Nav extends BaseComponent {
-  private readonly list;
+  private readonly listEl: HTMLElement;
 
   readonly navItems: NavItem[] = [];
 
   constructor() {
     super('nav', ['nav', 'header__nav']);
 
-    this.list = createElement('ul', ['nav__list']);
-    this.el.append(this.list);
+    this.listEl = createElement('ul', ['nav__list']);
 
-    this.getItemsList();
+    this.render();
+    this.addItems();
   }
 
-  // Get nav items list from 'nav-items.json' file
-  async getItemsList(): Promise<void> {
-    const data = await fetch('./nav-items.json');
-    const listNavItems: INavItem[] = await data.json();
-
-    this.addItems(listNavItems);
+  private render(): void {
+    this.el.append(this.listEl);
   }
 
-  addItems(listNavItems: INavItem[]): void {
-    listNavItems.forEach((item) => {
-      item.image = `assets/icons/${item.image}`; // set path to image
+  private addItems(): void {
+    NAV_ITEMS.forEach((item) => {
+      item.image = `assets/icons/${item.image}`;
 
       const navItem = new NavItem(item);
-      this.list.append(navItem.el);
       this.navItems.push(navItem);
+      this.listEl.append(navItem.el);
 
-      navItem.el.addEventListener('click', (e) => this.changeRoute(e, navItem));
+      navItem.el.addEventListener('click', (e) =>
+        this.changeRoute(e, item.url),
+      );
     });
   }
 
-  changeRoute(e: Event, navItem: NavItem): void {
+  changeRoute(e: Event, url: string): void {
     e.preventDefault();
+
     this.navItems.forEach((item) =>
-      item.el.classList.remove('nav-item_active'),
+      item.el.classList.remove(NAV_ITEM_ACTIVE_CLASS),
     );
 
-    const url = navItem.link.href;
-    const index = url.lastIndexOf('/') + 1; // index of begin the page name
-    const pageName = url.slice(index);
-
-    router.navigate(pageName);
+    router.navigate(url);
   }
 }

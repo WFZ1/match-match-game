@@ -5,4 +5,4 @@ export default interface IField {
   pattern: RegExp;
   error: string;
   classes?: string[];
-};
+}

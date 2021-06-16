@@ -8,10 +8,12 @@
   background-color: rgba(33, 33, 33, 0.08);
   border-radius: 4px 4px 0 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  transition: border-bottom-color .25s;
+  transition: border-bottom-color 0.25s;
   cursor: pointer;
 
-  .field__invalid & { border-bottom-color: #c10505; }
+  .field__invalid & {
+    border-bottom-color: #c10505;
+  }
 }
 
 .field__title {
@@ -19,9 +21,11 @@
   line-height: 16px;
   letter-spacing: 0.4px;
   color: rgba(0, 0, 0, 0.38);
-  transition: color .25s;
+  transition: color 0.25s;
 
-  .field__invalid & { color: #c10505; }
+  .field__invalid & {
+    color: #c10505;
+  }
 }
 
 .field__input {
@@ -35,9 +39,11 @@
   border: none;
   outline: 0;
   cursor: pointer;
-  transition: color .25s;
+  transition: color 0.25s;
 
-  .field__invalid & { color: #c10505; }
+  .field__invalid & {
+    color: #c10505;
+  }
 }
 
 .field__checker {
@@ -67,4 +73,6 @@
   color: #c10505;
 }
 
-.field__error_hidden { display: none; }
+.field__error_hidden {
+  display: none;
+}

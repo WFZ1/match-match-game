@@ -1,39 +1,39 @@
 import './best-players.scss';
 import BaseComponent from '../base/base-component';
-import IPlayer from '../../types/player.type';
 import BestPlayer from '../best-player/best-player';
+import IPlayer from '../../types/player.type';
 import createElement from '../../shared/create-element';
-
-const TITLE = 'Best players';
-const NUMBER_TOP_PLAYERS = 10;
+import { NUMBER_TOP_PLAYERS } from './constants';
 
 export default class BestPlayers extends BaseComponent {
   private readonly bestPlayers: BestPlayer[] = [];
 
-  private readonly container: HTMLElement;
+  private readonly containerEl: HTMLElement;
 
-  private readonly title: HTMLElement;
+  private readonly titleEl: HTMLElement;
 
-  constructor() {
+  constructor(title: string) {
     super('div', ['best-players']);
-    this.title = createElement('h2', ['best-players__title']);
-    this.container = createElement('div', ['best-players__container']);
 
-    this.render();
+    this.titleEl = createElement('h2', ['best-players__title']);
+    this.containerEl = createElement('div', ['best-players__container']);
+
+    this.render(title);
   }
 
-  render(): void {
-    this.title.textContent = TITLE;
-    this.el.append(this.title, this.container);
+  private render(title: string): void {
+    this.titleEl.textContent = title;
+    this.el.append(this.titleEl, this.containerEl);
   }
 
   addBestPlayers(players: IPlayer[]): void {
-    this.container.innerHTML = '';
+    this.containerEl.innerHTML = '';
 
     for (let i = 0; i < NUMBER_TOP_PLAYERS && players[i]; i++) {
       const player = new BestPlayer(['best-players__player'], players[i]);
+
       this.bestPlayers.push(player);
-      this.container.append(player.el);
+      this.containerEl.append(player.el);
     }
   }
 }

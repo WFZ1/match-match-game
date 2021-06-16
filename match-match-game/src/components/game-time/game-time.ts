@@ -1,7 +1,6 @@
 import './game-time.scss';
 import BaseComponent from '../base/base-component';
-
-const ZERO_TIME = '00:00';
+import { ZERO_TIME } from './constants';
 
 export default class GameTime extends BaseComponent {
   private stoptime = true;
@@ -15,7 +14,7 @@ export default class GameTime extends BaseComponent {
     this.render();
   }
 
-  render(): void {
+  private render(): void {
     this.el.textContent = ZERO_TIME;
   }
 
@@ -32,7 +31,7 @@ export default class GameTime extends BaseComponent {
     }
   }
 
-  updateTime(): void {
+  private updateTime(): void {
     if (!this.stoptime) {
       this.sec = +this.sec;
       this.min = +this.min;

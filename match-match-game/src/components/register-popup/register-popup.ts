@@ -1,63 +1,35 @@
 import './register-popup.scss';
+import header from '../header/header';
 import Popup from '../base/popup/popup';
 import RegisterForm from '../register-form/register-form';
 import createElement from '../../shared/create-element';
-import header from '../header/header';
-
-const FIELDS = [
-  {
-    title: 'First Name',
-    type: 'text',
-    name: 'first-name',
-    pattern: /(?=\d*\D+)^[^~!@#$%*()_—+=|:;"'`<>,.?/^]+$/,
-    error: 'First name can\'t be empty, contain only numbers, contain service characters (~ ! @ # $ % * () _ — + = | : ; " \' ` < > , . ? / ^).',
-  },
-  {
-    title: 'Last Name',
-    type: 'text',
-    name: 'last-name',
-    pattern: /(?=\d*\D+)^[^~!@#$%*()_—+=|:;"'`<>,.?/^]+$/,
-    error: 'Last name can\'t be empty, contain only numbers, contain service characters (~ ! @ # $ % * () _ — + = | : ; " \' ` < > , . ? / ^).',
-  },
-  {
-    title: 'E-mail',
-    type: 'email',
-    name: 'email',
-
-    // https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
-    pattern: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[x01-x08x0bx0cx0e-x1fx21x23-x5bx5d-x7f]|\\[x01-x09x0bx0cx0e-x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[x01-x08x0bx0cx0e-x1fx21-x5ax53-x7f]|\\[x01-x09x0bx0cx0e-x7f])+)\])/,
-    error: 'Email can\'t be empty, must comply with the standard email generation rule [RFC](https://en.wikipedia.org/wiki/Email_address#Standards_documents)',
-  },
-];
+import { FIELDS, BUTTONS } from './constants';
 
 export default class RegisterPopup extends Popup {
   private readonly form: RegisterForm;
 
-  private readonly title: HTMLElement;
+  private readonly titleEl: HTMLElement;
 
   constructor(title: string) {
     super(['register-popup'], 'register-popup__container');
+
+    this.titleEl = createElement('h3', ['register-popup__title']);
     this.form = new RegisterForm(['register-popup__form'], this);
-    this.title = createElement('h3', ['register-popup__title']);
-    this.render(title)
+
+    this.render(title);
+  }
+
+  private render(title: string): void {
+    this.titleEl.textContent = title;
+
+    FIELDS.forEach((field) => this.form.addField(field));
+    BUTTONS.forEach((btn) => this.form.addButton(btn));
+
+    this.containerEl.append(this.titleEl, this.form.el);
   }
 
   protected attachListeners(): void {
     header.registerBtn.el.addEventListener('click', () => this.showPopup());
     this.el.addEventListener('click', (e) => this.checkClickIsOutside(e));
-  }
-
-  private render(title: string): void {
-    this.title.textContent = title;
-
-    FIELDS.forEach((field) => this.form.addField(field));
-
-    this.form.addButton('submit', 'add user');
-    this.form.addButton('reset', 'cancel');
-
-    this.el.append(this.container);
-    this.container.append(this.title, this.form.el);
-
-    this.attachListeners();
   }
 }

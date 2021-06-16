@@ -1,38 +1,38 @@
 import './register-form.scss';
 import BaseComponent from '../base/base-component';
-import type RegisterPopup from '../register-popup/register-popup';
+import header from '../header/header';
+import db from '../base/database/database';
 import Field from '../field/field';
-import type Btn from '../base/btn/btn';
 import BtnAddPlayer from '../btn-add-player/btn-add-player';
 import BtnCancel from '../btn-cancel/btn-cancel';
-import header from '../header/header';
-import db from '../base/database';
 import createElement from '../../shared/create-element';
 import IField from '../../types/field.type';
 import playerAvatar from '../player-avatar/player-avatar';
-
-const FIELD_VALID_CLASS = 'field__valid';
-const BTN_CLASS = 'register-form__btn';
-
-const AVATAR_SRC = './assets/images/player/avatar.png';
+import type RegisterPopup from '../register-popup/register-popup';
+import type Btn from '../base/btn/btn';
+import { AVATAR_SRC, BTN_CLASS, FIELD_VALID_CLASS } from './constants';
 
 export default class RegisterForm extends BaseComponent {
   private readonly fields: Field[] = [];
 
   private readonly btns: Btn[] = [];
 
-  private avatar: HTMLElement;
+  private readonly avatarEl: HTMLElement;
 
-  private image: HTMLImageElement;
+  private readonly imageEl: HTMLImageElement;
 
-  private imgUploader: HTMLInputElement;
+  private readonly imgUploaderEl: HTMLInputElement;
 
-  constructor(classes: string[], private popup: RegisterPopup) {
+  constructor(classes: string[], private readonly popup: RegisterPopup) {
     super('form', ['register-form', ...classes]);
 
-    this.avatar = createElement('div', ['register-form__avatar']);
-    this.image = createElement('img', ['register-form__img']) as HTMLImageElement;
-    this.imgUploader = createElement('input', ['register-form__upload-img']) as HTMLInputElement;
+    this.avatarEl = createElement('div', ['register-form__avatar']);
+    this.imageEl = createElement('img', [
+      'register-form__img',
+    ]) as HTMLImageElement;
+    this.imgUploaderEl = createElement('input', [
+      'register-form__upload-img',
+    ]) as HTMLInputElement;
 
     this.render();
     this.attachListeners();
@@ -40,28 +40,28 @@ export default class RegisterForm extends BaseComponent {
 
   private render(): void {
     this.el.setAttribute('novalidate', '');
-    this.image.setAttribute('src', AVATAR_SRC);
+    this.imageEl.setAttribute('src', AVATAR_SRC);
 
-    this.imgUploader.setAttribute('type', 'file');
-    this.imgUploader.setAttribute('name', 'upload');
+    this.imgUploaderEl.setAttribute('type', 'file');
+    this.imgUploaderEl.setAttribute('name', 'upload');
 
-    this.avatar.append(this.image, this.imgUploader);
-    this.el.append(this.avatar);
+    this.el.append(this.avatarEl);
+    this.avatarEl.append(this.imageEl, this.imgUploaderEl);
   }
 
   private attachListeners(): void {
-    this.imgUploader.addEventListener('change', () => this.changeAvatar());
+    this.imgUploaderEl.addEventListener('change', () => this.changeAvatar());
   }
 
   private changeAvatar(): void {
-    const file = (this.imgUploader as { files: FileList }).files[0];
+    const file = (this.imgUploaderEl as { files: FileList }).files[0];
 
     if (file) {
       const reader = new FileReader();
 
       reader.onload = () => {
         if (reader.result) {
-          this.image.setAttribute('src', reader.result.toString());
+          this.imageEl.setAttribute('src', reader.result.toString());
         }
       };
 
@@ -77,7 +77,7 @@ export default class RegisterForm extends BaseComponent {
     this.el.append(field.el);
   }
 
-  addButton(type: string, text: string): void {
+  addButton({ type, text }: { [key: string]: string }): void {
     let btn;
 
     if (type === 'submit') {
@@ -92,14 +92,16 @@ export default class RegisterForm extends BaseComponent {
     this.el.append(btn.el);
   }
 
-  clearFields(): void {
+  private clearFields(): void {
     this.fields.forEach((field) =>
       field.el.classList.remove(FIELD_VALID_CLASS),
     );
   }
 
-  checkValidation(): boolean {
-    return this.fields.every((field) => field.el.matches(`.${FIELD_VALID_CLASS}`));
+  private checkValidation(): boolean {
+    return this.fields.every((field) =>
+      field.el.matches(`.${FIELD_VALID_CLASS}`),
+    );
   }
 
   addPlayer(e: Event): void {
@@ -110,13 +112,13 @@ export default class RegisterForm extends BaseComponent {
 
     const data: { [key: string]: string } = {};
     this.fields.forEach((field) => {
-      data[field.input.name] = field.input.value
+      data[field.input.name] = field.input.value;
     });
 
     const player = {
       fullName: `${data['first-name']} ${data['last-name']}`,
       email: data.email,
-      avatar: this.image.src,
+      avatar: this.imageEl.src,
     };
 
     db.addData('players', player);
@@ -124,6 +126,6 @@ export default class RegisterForm extends BaseComponent {
     this.popup.hidePopup();
 
     header.renderPlayerPart();
-    playerAvatar.setImage(this.image.src);
+    playerAvatar.setImage(this.imageEl.src);
   }
 }

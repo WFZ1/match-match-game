@@ -15,7 +15,7 @@ export default class Field extends BaseComponent {
   private readonly error: HTMLElement;
 
   constructor(fieldProps: IField) {
-    super('div', ['field', ...(fieldProps.classes as []) ]);
+    super('div', ['field', ...(fieldProps.classes as [])]);
 
     this.container = createElement('label', ['field__container']);
     this.title = createElement('span', ['field__title']);
@@ -44,11 +44,11 @@ export default class Field extends BaseComponent {
     this.container.append(this.title, this.input, this.checker);
   }
 
-  attachListeners(): void {
+  private attachListeners(): void {
     this.el.addEventListener('input', () => this.validateField());
   }
 
-  validateField(): void {
+  private validateField(): void {
     if (this.input.validity.valid) {
       this.el.classList.remove('field__invalid');
       this.el.classList.add('field__valid');

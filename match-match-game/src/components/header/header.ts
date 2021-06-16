@@ -6,20 +6,22 @@ import RegisterBtn from '../register-btn/register-btn';
 import playerAvatar from '../player-avatar/player-avatar';
 import btnToggleGame from '../btn-toggle-game/btn-toggle-game';
 import createElement from '../../shared/create-element';
+import { LOGO_TEXT } from './constants';
 
 export class Header extends BaseComponent {
-  private readonly container;
+  private readonly containerEl: HTMLElement;
 
-  private readonly logo;
+  private readonly logo: Logo;
 
-  readonly nav;
+  readonly nav: Nav;
 
-  readonly registerBtn;
+  readonly registerBtn: RegisterBtn;
 
   constructor() {
     super('header', ['header']);
-    this.container = createElement('div', ['header__container']);
-    this.logo = new Logo();
+
+    this.containerEl = createElement('div', ['header__container']);
+    this.logo = new Logo(LOGO_TEXT);
     this.nav = new Nav();
     this.registerBtn = new RegisterBtn(
       ['header__register-btn'],
@@ -29,18 +31,17 @@ export class Header extends BaseComponent {
     this.render();
   }
 
+  private render(): void {
+    this.el.append(this.containerEl);
+    this.containerEl.append(this.logo.el, this.nav.el, this.registerBtn.el);
+  }
+
   renderPlayerPart(): void {
     this.registerBtn.el.remove();
     btnToggleGame.addClasses(['header__btn-start-game']);
-    this.container.append(btnToggleGame.el, playerAvatar.el);
-  }
-
-  render(): void {
-    this.el.append(this.container);
-    this.container.append(this.logo.el, this.nav.el, this.registerBtn.el);
+    this.containerEl.append(btnToggleGame.el, playerAvatar.el);
   }
 }
 
-// Singleton pattern
 const header = new Header();
 export default header;

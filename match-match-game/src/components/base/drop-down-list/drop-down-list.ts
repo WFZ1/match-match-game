@@ -4,7 +4,7 @@ import createElement from '../../../shared/create-element';
 import IDropDownListItem from '../../../types/drop-down-list-item.type';
 
 export default class DropDownList extends BaseComponent {
-  opts: HTMLElement[] = [];
+  private readonly opts: HTMLElement[] = [];
 
   constructor(classes: string[], id: string, opts: IDropDownListItem[]) {
     super('select', ['drop-down-list', ...classes]);
@@ -18,8 +18,10 @@ export default class DropDownList extends BaseComponent {
       const opt = createElement('option', [
         'drop-down-list__item',
       ]) as HTMLOptionElement;
+
       opt.value = obj.value.toLowerCase();
       opt.textContent = obj.value;
+
       if (obj.selected) opt.selected = true;
       if (obj.disabled) opt.disabled = true;
 

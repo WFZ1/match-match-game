@@ -3,7 +3,7 @@ import BaseComponent from '../base-component';
 import createElement from '../../../shared/create-element';
 
 export default class Popup extends BaseComponent {
-  readonly container: HTMLElement;
+  readonly containerEl: HTMLElement;
 
   constructor(
     classes: string[],
@@ -11,14 +11,18 @@ export default class Popup extends BaseComponent {
     private readonly hiddenClass: string = 'popup_hidden',
   ) {
     super('div', ['popup', ...classes, hiddenClass]);
-    this.container = createElement('div', ['popup__container', containerClass]);
+
+    this.containerEl = createElement('div', [
+      'popup__container',
+      containerClass,
+    ]);
 
     this.build();
     this.attachListeners();
   }
 
   private build(): void {
-    this.el.append(this.container);
+    this.el.append(this.containerEl);
   }
 
   protected attachListeners(): void {

@@ -17,16 +17,12 @@ class Router {
     this.listen();
   }
 
-  /* ADDING ROUTES ================================================================================ */
-
-  public add(path: string, callback: () => void): Router {
+  add(path: string, callback: () => void): Router {
     this.routes.push({ path, callback });
     return this;
   }
 
-  /* DELETING ROUTES ================================================================================ */
-
-  public remove(path: string): Router {
+  remove(path: string): Router {
     const routeIndex: number = this.routes.findIndex(
       (route) => route.path === path,
     );
@@ -34,19 +30,13 @@ class Router {
     return this;
   }
 
-  /* FLUSH ROUTES ARRAY ================================================================================ */
-
-  public flush(): void {
+  flush(): void {
     this.routes = [];
   }
 
-  /* CLEAR SLASHES INSIDE PATH ================================================================================ */
-
-  static clearSlashes(path: string): string {
+  private static clearSlashes(path: string): string {
     return path.replace(/^\/|\/$/g, '');
   }
-
-  /* GET CURRENT PAGE NAME ================================================================================ */
 
   private getPageName(): string {
     let name = '';
@@ -63,9 +53,7 @@ class Router {
     return Router.clearSlashes(name);
   }
 
-  /* GO TO PAGE ================================================================================ */
-
-  public navigate(path = ''): Router {
+  navigate(path = ''): Router {
     if (this.mode === 'history') {
       window.history.pushState(null, '', this.root + path);
     } else {
@@ -78,13 +66,12 @@ class Router {
     return this;
   }
 
-  /* START LISTEN CHANGING URL ================================================================================ */
-
+  // Start listen changing url
   private listen(): void {
     setInterval(Router.interval, 50, this);
   }
 
-  static interval(that: Router): void {
+  private static interval(that: Router): void {
     const pageName = that.getPageName();
 
     if (that.curPage === pageName) return;

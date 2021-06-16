@@ -1,5 +1,6 @@
 export default interface IStep {
-  id: number;
+  classes?: string[];
+  id?: number;
   text: string;
   image: string;
 }

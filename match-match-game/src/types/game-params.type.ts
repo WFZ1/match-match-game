@@ -4,4 +4,5 @@ export default interface IGameParams {
   title: string;
   id: string;
   options: IDropDownListItem[];
+  classes?: string[];
 }

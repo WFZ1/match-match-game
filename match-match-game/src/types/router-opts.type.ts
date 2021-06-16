@@ -1,3 +1,4 @@
 export default interface IRouterOpts {
-  [key: string]: string;
+  mode?: string;
+  root?: string;
 }

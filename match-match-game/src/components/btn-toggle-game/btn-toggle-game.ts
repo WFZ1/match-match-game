@@ -2,24 +2,25 @@ import './btn-toggle-game.scss';
 import BaseComponent from '../base/base-component';
 import router from '../base/router';
 import game from '../game/game';
-
-const GAME_URL = 'game';
-const START_GAME = 'start game';
-const STOP_GAME = 'stop game';
+import { GAME_URL, START_GAME, STOP_GAME } from './constants';
 
 class BtnToggleGame extends BaseComponent {
   private isGameStart = false;
 
   constructor() {
     super('a', ['btn-toggle-game', 'btn']);
+
     this.render();
+    this.attachListeners();
   }
 
   private render(): void {
     this.el.textContent = START_GAME;
     this.el.setAttribute('href', GAME_URL);
-    this.el.addEventListener('click', (e) => this.attachHandler(e));
+  }
 
+  private attachListeners(): void {
+    this.el.addEventListener('click', (e) => this.attachHandler(e));
     game.attachHandlerGameCompleting(this.toggleGame.bind(this));
   }
 
